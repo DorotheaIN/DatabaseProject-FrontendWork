@@ -1,0 +1,4 @@
+1.新建Vue项目
+2.
+npm install less less-loader --save-dev
+npm i element-ui -S
