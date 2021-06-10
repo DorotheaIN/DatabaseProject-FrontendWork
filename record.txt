@@ -2,3 +2,6 @@
 2.
 npm install less less-loader --save-dev
 npm i element-ui -S
+3.
+npm install webpack -g
+npm install --global vue-cli
