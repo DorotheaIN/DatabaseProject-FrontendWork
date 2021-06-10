@@ -1,12 +1,12 @@
 <template>
+
 </template>
 
 <script>
 export default {
-name: "Inquiry"
+name: "Inquiry-InputBox"
 }
 </script>
-
 
 <style scoped>
 
