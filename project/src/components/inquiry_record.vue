@@ -4,7 +4,7 @@
 
 <script>
 export default {
-name: "Inquiry-InputBox"
+  name: "inquiry_record"
 }
 </script>
 

@@ -42,7 +42,7 @@
                  <hos_card></hos_card>
             </div>
         </div>
-         
+
         <div class="foot">
             <el-footer>2021-6-9 版权所有</el-footer>
         </div>
@@ -66,13 +66,16 @@ export default {
             { id:0,idView:require("../assets/photo1.png") },
             { id:1,idView:require("../assets/photo2.png") },
       ]
-    };
+    }
   },
+  methods:{
 
- 
+  }
+
+
 };
 </script>
-    
+
 
 <style scoped>
 .online{

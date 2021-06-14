@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 import doc_card from '../components/doc_card.vue'
 import hos_card from '../components/hos_card.vue'
 import Inquiry from '../views/Inquiry.vue'
+import text_box from "../components/text_box";
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ const routes = [
         path:'/Inquiry',
         component:Inquiry
     },
+    {
+        path:'/text_box',
+        component:text_box
+    },
+
 ]
 
 const router = new VueRouter({

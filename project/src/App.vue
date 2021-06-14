@@ -5,12 +5,16 @@
 </template>
 
 <style>
-
- 
+html,body,#app{
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
 </style>
 
 <script>
 export default{
    name: 'app'
 }
+
 </script>
