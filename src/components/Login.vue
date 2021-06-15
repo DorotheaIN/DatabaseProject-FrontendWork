@@ -35,7 +35,7 @@
         <!-- 按钮区域 -->
         <el-form-item class="btns">
           <el-button type="primary" @click="login">登录</el-button>
-          <el-button type="primary">注册</el-button>
+          <el-button type="primary" @click="toRegister">注册</el-button>
           <el-button type="info" @click="resetloginForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -75,7 +75,7 @@ export default {
           },
         ],
       },
-      activeName: "First",
+      activeName: "first",
     };
   },
   methods: {
@@ -88,15 +88,19 @@ export default {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return;
         const { data: res } = await this.$http.post("login", this.loginForm); //替换"login"
-        if (res.meta.status !== 200) //return this.$message.error("登录失败！");
-        this.$message.success("登录成功!");
+        if (res.meta.status !== 200)
+          //return this.$message.error("登录失败！");
+          this.$message.success("登录成功!");
         // 1. 将登陆成功之后的token，保存到客户端的sessionStorage中
         //  1.1 项目中除了登录之外的其他API接口，必须在登录之后才能访问
         //  1.2 token只应在当前网站打开期间生效，所以将token保存在sessionStorage
-        window.sessionStorage.setItem("token",res.data.token);
+        window.sessionStorage.setItem("token", res.data.token);
         // 2. 通过编程式导航跳转到后台主页，路由地址是 /home
-        this.$router.push("/home")
+        this.$router.push("/home");
       });
+    },
+    toRegister() {
+      this.$router.push("/register");
     },
     handleClick(tab, event) {
       console.log(tab, event);

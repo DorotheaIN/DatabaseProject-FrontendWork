@@ -13,8 +13,12 @@
         label-width="0px"
         class="login_form"
       >
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="患者注册" name="first"></el-tab-pane>
+          <el-tab-pane label="医生注册" name="second"></el-tab-pane>
+        </el-tabs>
         <!-- 用户名 -->
-        <el-form-item prop="username" label="用户名：">
+        <el-form-item prop="username" >
           <el-input
             v-model="loginForm.username"
             prefix-icon="el-icon-user"
@@ -37,10 +41,11 @@
           ></el-input>
         </el-form-item>
 
+        <!--用路由跳转到登陆组件-->
+        <router-link to="/Login">已有账号，登陆</router-link>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
-          <!--用路由跳转到登陆组件-->
-          <router-link to="/Login">已有账号，登陆</router-link>
+          <!-- <router-link to="/Login">已有账号，登陆</router-link> -->
           <el-button type="primary" @click="register">注册</el-button>
           <el-button type="info" @click="resetloginForm">重置</el-button>
         </el-form-item>
@@ -48,7 +53,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -93,6 +97,7 @@ export default {
           },
         ],
       },
+       activeName: "first",
     };
   },
   methods: {
@@ -103,17 +108,19 @@ export default {
     },
     //注册功能
     register() {
-      if (this.password != this.rePassword) {
-           this.$message({
-          showClose: true,
-          message: '两次输入密码不一致，请重新输入！',
-          type: 'error'})
+      if (this.username) {
       } 
-      else {
-          this.$message({
+      else if (this.password != this.rePassword) {
+        this.$message({
           showClose: true,
-          message: '注册成功',
-          type: 'success'
+          message: "两次输入密码不一致，请重新输入！",
+          type: "error",
+        });
+      } else {
+        this.$message({
+          showClose: true,
+          message: "注册成功",
+          type: "success",
         });
         this.$router.push("/login");
       }
@@ -131,13 +138,13 @@ export default {
 
 .login_box {
   width: 450px;
-  height: 300px;
+  height: 400px;
   background-color: #ffffff;
   border-radius: 5px;
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -40%);
 }
 
 .avatar_box {
