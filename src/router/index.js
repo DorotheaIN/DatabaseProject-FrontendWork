@@ -2,13 +2,15 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
+import Register from '../components/Register.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   { path: '/', redirect: '/login'},
-  { path: '/login', component: Login },
-  { path: '/home', component: Home }
+  { path: '/login',component: Login,meta:{title: '济病通-登录'} },
+  { path: '/home',component: Home,meta:{title: '主页'}},
+  { path: '/register', component: Register,meta:{title: '济病通-注册'} }
 ]
 
 const router = new VueRouter({
