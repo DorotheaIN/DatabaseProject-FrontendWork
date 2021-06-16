@@ -10,45 +10,83 @@
         ref="loginFormRef"
         :model="loginForm"
         :rules="loginFormRules"
-        label-width="0px"
+        label-width="80px"
         class="login_form"
       >
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="患者注册" name="first"></el-tab-pane>
-          <el-tab-pane label="医生注册" name="second"></el-tab-pane>
+          <el-tab-pane label="患者注册" name="first">
+            <!-- 用户名 -->
+            <el-form-item prop="username" label="用户名">
+              <el-input
+                v-model="loginForm.username"
+                prefix-icon="el-icon-user"
+              ></el-input>
+            </el-form-item>
+            <!-- 密码 -->
+            <el-form-item prop="password" label="密码">
+              <el-input
+                v-model="loginForm.password"
+                prefix-icon="el-icon-lock"
+                type="password"
+              ></el-input>
+            </el-form-item>
+            <!-- 确认密码 -->
+            <el-form-item prop="rePassword" label="确认密码">
+              <el-input
+                v-model="loginForm.rePassword"
+                prefix-icon="el-icon-lock"
+                type="password"
+              ></el-input>
+            </el-form-item>
+            <!--用路由跳转到登陆组件-->
+            <router-link to="/login">已有账号，登陆</router-link>
+            <!-- 按钮区域 -->
+            <el-form-item class="btns">
+              <!-- <router-link to="/Login">已有账号，登陆</router-link> -->
+              <el-button type="primary" @click="register">注册1</el-button>
+              <el-button type="info" @click="resetloginForm">重置</el-button>
+            </el-form-item>
+          </el-tab-pane>
+          <el-tab-pane label="医生注册" name="second">
+            <!-- 用户名 -->
+            <el-form-item prop="username" label="用户名">
+              <el-input
+                v-model="loginForm.username"
+                prefix-icon="el-icon-user"
+              ></el-input>
+            </el-form-item>
+            <!-- 密码 -->
+            <el-form-item prop="password" label="密码">
+              <el-input
+                v-model="loginForm.password"
+                prefix-icon="el-icon-lock"
+                type="password"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="所属医院">
+              <el-select v-model="loginForm.region" placeholder="请选择所属医院">
+                <el-option label="医院一" value="shanghai"></el-option>
+                <el-option label="医院二" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <!-- 确认密码 -->
+            <el-form-item prop="rePassword" label="确认密码">
+              <el-input
+                v-model="loginForm.rePassword"
+                prefix-icon="el-icon-lock"
+                type="password"
+              ></el-input>
+            </el-form-item>
+            <!--用路由跳转到登陆组件-->
+            <router-link to="/login">已有账号，登陆</router-link>
+            <!-- 按钮区域 -->
+            <el-form-item class="btns">
+              <!-- <router-link to="/Login">已有账号，登陆</router-link> -->
+              <el-button type="primary" @click="register">注册2</el-button>
+              <el-button type="info" @click="resetloginForm">重置</el-button>
+            </el-form-item>
+          </el-tab-pane>
         </el-tabs>
-        <!-- 用户名 -->
-        <el-form-item prop="username">
-          <el-input
-            v-model="loginForm.username"
-            prefix-icon="el-icon-user"
-          ></el-input>
-        </el-form-item>
-        <!-- 密码 -->
-        <el-form-item prop="password">
-          <el-input
-            v-model="loginForm.password"
-            prefix-icon="el-icon-lock"
-            type="password"
-          ></el-input>
-        </el-form-item>
-        <!-- 确认密码 -->
-        <el-form-item prop="rePassword">
-          <el-input
-            v-model="loginForm.rePassword"
-            prefix-icon="el-icon-lock"
-            type="password"
-          ></el-input>
-        </el-form-item>
-
-        <!--用路由跳转到登陆组件-->
-        <router-link to="/Login">已有账号，登陆</router-link>
-        <!-- 按钮区域 -->
-        <el-form-item class="btns">
-          <!-- <router-link to="/Login">已有账号，登陆</router-link> -->
-          <el-button type="primary" @click="register">注册</el-button>
-          <el-button type="info" @click="resetloginForm">重置</el-button>
-        </el-form-item>
       </el-form>
     </div>
   </div>
@@ -83,6 +121,7 @@ export default {
         username: "",
         password: "",
         rePassword: "",
+        region:"",
       },
       //这是表单的验证规则对象
       loginFormRules: {
@@ -140,9 +179,9 @@ export default {
           this.loading = true;
           this.$axios({
             method: "post",
-            url: "/api/v1/sign",   //改地址
+            url: "/api/v1/sign", //改地址
             headers: {
-              "Content-Type": "application/json;charset=UTF-8",   //这是以json字符串的形式发送到后端，要改
+              "Content-Type": "application/json;charset=UTF-8", //这是以json字符串的形式发送到后端，要改
             },
             data: {
               name: this.loginForm.username,
@@ -212,7 +251,7 @@ export default {
   box-shadow: 0 0 10px #ddd;
   position: absolute;
   left: 50%;
-  transform: translate(-50%, -65%);
+  transform: translate(-50%, -70%);
   background-color: #fff;
   img {
     width: 100%;

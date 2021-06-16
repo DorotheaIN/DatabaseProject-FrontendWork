@@ -14,7 +14,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  //mode:"history"   //去掉#，不确定改不改，首页重定向的问题
 })
 
 /*
