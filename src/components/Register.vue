@@ -18,7 +18,7 @@
           <el-tab-pane label="医生注册" name="second"></el-tab-pane>
         </el-tabs>
         <!-- 用户名 -->
-        <el-form-item prop="username" >
+        <el-form-item prop="username">
           <el-input
             v-model="loginForm.username"
             prefix-icon="el-icon-user"
@@ -57,8 +57,28 @@
 <script>
 export default {
   data() {
+    //在data里面定义两个校验器,检验输入框是否为空以及两次密码是否一致
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.loginForm.repassword !== "") {
+          this.$refs.loginForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.loginForm.password) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
-      //这是登录表单的数据绑定对象
+      //这是注册表单的数据绑定对象
       loginForm: {
         username: "",
         password: "",
@@ -68,7 +88,7 @@ export default {
       loginFormRules: {
         //验证用户名是否合法
         username: [
-          { required: true, message: "请输入用户名称", trigger: "blur" },
+          { required: true, message: "请输入用户名称", trigger: "change" },
           {
             min: 3,
             max: 10,
@@ -78,26 +98,32 @@ export default {
         ],
         //验证密码是否合法
         password: [
-          { required: true, message: "请输入登录密码", trigger: "blur" },
+          { required: true, message: "请输入登录密码", trigger: "change" },
           {
             min: 6,
             max: 15,
             message: "长度在 6 到 15 个字符",
             trigger: "blur",
           },
+          { validator: validatePass, trigger: "blur" },
         ],
         //确认密码是否正确
         rePassword: [
-          { required: true, message: "请再次确认密码", trigger: "blur" },
+          { required: true, message: "请再次确认密码", trigger: "change" },
           {
             min: 6,
             max: 15,
             message: "长度在 6 到 15 个字符",
             trigger: "blur",
           },
+          { validator: validatePass2, trigger: "blur" },
         ],
       },
-       activeName: "first",
+      passwordType: "password",
+      capsTooltip: false,
+      loading: false,
+      redirect: undefined,
+      activeName: "first",
     };
   },
   methods: {
@@ -108,26 +134,56 @@ export default {
     },
     //注册功能
     register() {
-      if (this.username) {
-      } 
-      else if (this.password != this.rePassword) {
-        this.$message({
-          showClose: true,
-          message: "两次输入密码不一致，请重新输入！",
-          type: "error",
-        });
-      } else {
-        this.$message({
-          showClose: true,
-          message: "注册成功",
-          type: "success",
-        });
-        this.$router.push("/login");
-      }
+      this.$refs.loginForm.validate((valid) => {
+        // 获取loginform的实例（el-form），找到validate方法，根据验证规则rules校验是否valid
+        if (valid) {
+          this.loading = true;
+          this.$axios({
+            method: "post",
+            url: "/api/v1/sign",   //改地址
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",   //这是以json字符串的形式发送到后端，要改
+            },
+            data: {
+              name: this.loginForm.username,
+              password: this.loginForm.password,
+            },
+          })
+            .then((res) => {
+              //请求成功后执行函数
+              if (res.data.message === "SUCCESS") {
+                this.$router.push("/login"); //登录验证成功路由实现跳转
+                this.$message({
+                  showClose: true,
+                  message: "注册成功",
+                  type: "success",
+                });
+              } else {
+                this.$notify({
+                  title: "提示",
+                  message: "用户登录失败",
+                  duration: 3000,
+                });
+              }
+            })
+            .catch(() => {
+              his.$notify({
+                title: "提示",
+                message: "用户访问错误",
+                duration: 3000,
+              });
+              console.log(err);
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
   },
 };
 </script>
+
 
 
 <style lang="less" scoped>
