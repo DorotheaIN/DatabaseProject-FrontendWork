@@ -1,9 +1,12 @@
 <template>
-  <div class="login_container">
+  <div>
+    <div class="login_background">
+      <img :src="imgSrc" width="100%" height="100%" alt="" />
+    </div>
     <div class="login_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
-        <img src="../assets/logo.png" alt="" />
+        <img src="../assets/logo2.png" alt="" />
       </div>
       <!-- 注册表单区域 -->
       <el-form
@@ -38,12 +41,10 @@
                 type="password"
               ></el-input>
             </el-form-item>
-            <!--用路由跳转到登陆组件-->
-            <router-link to="/login">已有账号，登陆</router-link>
             <!-- 按钮区域 -->
             <el-form-item class="btns">
-              <!-- <router-link to="/Login">已有账号，登陆</router-link> -->
-              <el-button type="primary" @click="register">注册1</el-button>
+              <el-button type="text" @click="toLogin">已有账号，登陆</el-button>
+              <el-button type="primary" @click="register">注册</el-button>
               <el-button type="info" @click="resetloginForm">重置</el-button>
             </el-form-item>
           </el-tab-pane>
@@ -64,7 +65,10 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="所属医院">
-              <el-select v-model="loginForm.region" placeholder="请选择所属医院">
+              <el-select
+                v-model="loginForm.region"
+                placeholder="请选择所属医院"
+              >
                 <el-option label="医院一" value="shanghai"></el-option>
                 <el-option label="医院二" value="beijing"></el-option>
               </el-select>
@@ -77,12 +81,10 @@
                 type="password"
               ></el-input>
             </el-form-item>
-            <!--用路由跳转到登陆组件-->
-            <router-link to="/login">已有账号，登陆</router-link>
             <!-- 按钮区域 -->
             <el-form-item class="btns">
-              <!-- <router-link to="/Login">已有账号，登陆</router-link> -->
-              <el-button type="primary" @click="register">注册2</el-button>
+              <el-button type="text" @click="toLogin">已有账号，登陆</el-button>
+              <el-button type="primary" @click="register">注册</el-button>
               <el-button type="info" @click="resetloginForm">重置</el-button>
             </el-form-item>
           </el-tab-pane>
@@ -121,7 +123,7 @@ export default {
         username: "",
         password: "",
         rePassword: "",
-        region:"",
+        region: "",
       },
       //这是表单的验证规则对象
       loginFormRules: {
@@ -163,9 +165,14 @@ export default {
       loading: false,
       redirect: undefined,
       activeName: "first",
+      imgSrc: require("../assets/bg.jpg"),
     };
   },
   methods: {
+    //跳转到登录界面
+    toLogin() {
+      this.$router.push("/login");
+    },
     //点击重置按钮，重置登录
     resetloginForm() {
       //console.log(this)
@@ -226,26 +233,31 @@ export default {
 
 
 <style lang="less" scoped>
-.login_container {
-  background-color: #2b4b6b;
+.login_background {
+  width: 100%;
   height: 100%;
+  z-index: -1;
+  position: absolute;
 }
 
 .login_box {
   width: 450px;
   height: 400px;
   background-color: #ffffff;
+  opacity: 0.8;
   border-radius: 5px;
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -40%);
+  transform: translate(25%, -40%);
+  z-index: 1;
+  border: 1px solid #d8d2d2;
 }
 
 .avatar_box {
   height: 130px;
   width: 130px;
-  border: 1px solid #eeeeee;
+  border: 1px solid #d8d2d2;
   border-radius: 50%;
   padding: 10px;
   box-shadow: 0 0 10px #ddd;
@@ -263,7 +275,7 @@ export default {
 
 .login_form {
   position: absolute;
-  bottom: 0;
+  bottom:10px;
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;

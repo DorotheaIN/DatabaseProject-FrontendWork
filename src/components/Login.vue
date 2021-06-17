@@ -1,9 +1,12 @@
 <template>
-  <div class="login_container">
+  <div>
+    <div class="login_background">
+      <img :src="imgSrc" width="100%" height="100%" alt="" />
+    </div>
     <div class="login_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
-        <img src="../assets/logo.png" alt="" />
+        <img src="../assets/logo2.png" alt="" />
       </div>
       <!-- 登录表单区域 -->
       <el-form
@@ -32,7 +35,7 @@
             </el-form-item>
             <!-- 按钮区域 -->
             <el-form-item class="btns">
-              <el-button type="primary" @click="login">登录1</el-button>
+              <el-button type="primary" @click="login">登录</el-button>
               <el-button type="primary" @click="toRegister">注册</el-button>
               <el-button type="info" @click="resetloginForm">重置</el-button>
             </el-form-item>
@@ -55,7 +58,7 @@
             </el-form-item>
             <!-- 按钮区域 -->
             <el-form-item class="btns">
-              <el-button type="primary" @click="login">登录2</el-button>
+              <el-button type="primary" @click="login">登录</el-button>
               <el-button type="primary" @click="toRegister">注册</el-button>
               <el-button type="info" @click="resetloginForm">重置</el-button>
             </el-form-item>
@@ -99,6 +102,7 @@ export default {
         ],
       },
       activeName: "first",
+      imgSrc: require("../assets/bg2.jpg"),
     };
   },
   methods: {
@@ -133,26 +137,31 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.login_container {
-  background-color: #2b4b6b;
+.login_background {
+  width: 100%;
   height: 100%;
+  z-index: -1;
+  position: absolute;
 }
 
 .login_box {
   width: 450px;
   height: 300px;
-  background-color: #ffffff;
+  background-color: #fff;
+  opacity: 0.8;
   border-radius: 5px;
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(25%, -40%);
+  z-index: 1;
+  border: 1px solid #d8d2d2;
 }
 
 .avatar_box {
   height: 130px;
   width: 130px;
-  border: 1px solid #eeeeee;
+  border: 1px solid #d8d2d2;
   border-radius: 50%;
   padding: 10px;
   box-shadow: 0 0 10px #ddd;
