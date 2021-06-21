@@ -1,29 +1,35 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Navigation from '../components/Navigation.vue'
 import Home from '../views/Home.vue'
-import doc_card from '../components/doc_card.vue'
-import hos_card from '../components/hos_card.vue'
+import Test from '../views/Test.vue'
+import  DocList from '../views/listPage/docList.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
- {
-   path:'/Navigation',
-   component: Navigation
- },
- {
-   path:'/Home',
-   component:Home
- },
- {
-   path:'/doc_card',
-   component:doc_card
- },
- {
-  path:'/hos_card',
-  component:hos_card
-},
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
+  {
+    path: '/about',
+    name: 'About',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test
+  },
+  {
+    path: '/listPage/docList',
+    name: 'DocList',
+    component: DocList
+  }
 ]
 
 const router = new VueRouter({
@@ -31,3 +37,4 @@ const router = new VueRouter({
 })
 
 export default router
+
