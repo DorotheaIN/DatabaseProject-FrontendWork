@@ -1,29 +1,31 @@
 <template>
   <div>
     <div class="text">
+      <inquiry_title></inquiry_title>
       <text_box></text_box>
     </div>
-
-    <el-container>
-      <el-main>
-        <div class="text"></div>
-
-      </el-main>
-      <el-aside width="350px">
-      </el-aside>
-    </el-container>
+    <div class="record">
+      <div class="tab_pos">
+        <tabs></tabs>
+      </div>
+    </div>
   </div>
+
 
 </template>
 
 <script>
 import text_box from "../components/text_box";
-import Text_box from "../components/text_box";
+import inquiry_record from "../components/medicalrecord_form";
+import tabs from "../components/tabs";
+import inquiry_title from "../components/inquiry_title";
 export default {
   name: "Inquiry",
-  components: {Text_box},
-  comments:{
-    text_box
+  components:{
+    inquiry_title,
+    text_box,
+    inquiry_record,
+    tabs
   },
   data(){
     return{
@@ -37,15 +39,33 @@ export default {
 <style scoped>
 .text{
   position: absolute;
-  padding: 0;
-  margin: 0;
+  padding-left: 3%;
   top:0;
   left: 0;
   bottom: 0;
-  width: 70%;
-  border: 1px solid #DCDCDC;
+  width: 67%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+  overflow: hidden
 }
-html,body,#app{
-  height: 100%;
+
+.record{
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  top:0;
+  right:0;
+  bottom: 0;
+  width: 30%;
+  border: 0;
+  overflow: hidden
 }
+.tab_pos{
+  position: relative;
+  margin: auto;
+  top:15px;
+  left:20px;
+  overflow: hidden
+
+}
+
 </style>

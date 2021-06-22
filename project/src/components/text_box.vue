@@ -41,8 +41,9 @@ name: "text_box",
 
 <style scoped>
 .talk_body {
+  position: relative;
   width: 100%;
-  height: 100%;
+  height: 90%;
   background: #fff;
   border: 0;
   overflow: auto;
@@ -61,7 +62,7 @@ name: "text_box",
   position: relative;
   height: 20%;
   margin: auto;
-  width:98%;
+  width:95%;
   bottom: 0;
 }
 
