@@ -64,14 +64,12 @@
                 type="password"
               ></el-input>
             </el-form-item>
-            <el-form-item label="所属医院">
-              <el-select
-                v-model="loginForm.region"
-                placeholder="请选择所属医院"
-              >
-                <el-option label="医院一" value="shanghai"></el-option>
-                <el-option label="医院二" value="beijing"></el-option>
-              </el-select>
+            <!-- 医院 -->
+            <el-form-item prop="hospital" label="工作医院">
+              <el-input
+                v-model="loginForm.hospital"
+                prefix-icon="el-icon-office-building"
+              ></el-input>
             </el-form-item>
             <!-- 确认密码 -->
             <el-form-item prop="rePassword" label="确认密码">
@@ -99,19 +97,7 @@ export default {
   data() {
     //在data里面定义两个校验器,检验输入框是否为空以及两次密码是否一致
     var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.loginForm.repassword !== "") {
-          this.$refs.loginForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.loginForm.password) {
+    if (value !== this.loginForm.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -123,13 +109,13 @@ export default {
         username: "",
         password: "",
         rePassword: "",
-        region: "",
+        hospital: "",
       },
       //这是表单的验证规则对象
       loginFormRules: {
         //验证用户名是否合法
         username: [
-          { required: true, message: "请输入用户名称", trigger: "change" },
+          { required: true, message: "请输入用户名称", trigger: "blur" },
           {
             min: 3,
             max: 10,
@@ -137,9 +123,28 @@ export default {
             trigger: "blur",
           },
         ],
+        //验证工作医院是否合法
+        hospital:[
+          { required: true, message: "请输入工作医院", trigger: "blur"},
+          {
+            min: 4,
+            message: "工作医院不能为空",
+            trigger: "blur",
+          },
+        ],
         //验证密码是否合法
         password: [
-          { required: true, message: "请输入登录密码", trigger: "change" },
+          { required: true, message: "请输入登录密码", trigger: "blur" },
+          {
+            min: 6,
+            max: 15,
+            message: "长度在 6 到 15 个字符",
+            trigger: "blur",
+          },
+        ],
+        //确认密码是否正确
+        rePassword: [
+          { required: true, message: "请再次确认密码", trigger: "blur" },
           {
             min: 6,
             max: 15,
@@ -148,24 +153,13 @@ export default {
           },
           { validator: validatePass, trigger: "blur" },
         ],
-        //确认密码是否正确
-        rePassword: [
-          { required: true, message: "请再次确认密码", trigger: "change" },
-          {
-            min: 6,
-            max: 15,
-            message: "长度在 6 到 15 个字符",
-            trigger: "blur",
-          },
-          { validator: validatePass2, trigger: "blur" },
-        ],
       },
       passwordType: "password",
       capsTooltip: false,
       loading: false,
       redirect: undefined,
       activeName: "first",
-      imgSrc: require("../assets/bg.jpg"),
+      imgSrc: require("../assets/bg.png"),
     };
   },
   methods: {
@@ -244,12 +238,12 @@ export default {
   width: 450px;
   height: 400px;
   background-color: #ffffff;
-  opacity: 0.8;
+  opacity: 0.9;
   border-radius: 5px;
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(25%, -40%);
+  transform: translate(-110%, -40%);
   z-index: 1;
   border: 1px solid #d8d2d2;
 }

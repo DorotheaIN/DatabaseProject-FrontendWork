@@ -102,7 +102,7 @@ export default {
         ],
       },
       activeName: "first",
-      imgSrc: require("../assets/bg2.jpg"),
+      imgSrc: require("../assets/bg2.png"),
     };
   },
   methods: {
@@ -148,12 +148,12 @@ export default {
   width: 450px;
   height: 300px;
   background-color: #fff;
-  opacity: 0.8;
+  opacity: 0.9;
   border-radius: 5px;
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(25%, -40%);
+  transform: translate(10%, -40%);
   z-index: 1;
   border: 1px solid #d8d2d2;
 }
