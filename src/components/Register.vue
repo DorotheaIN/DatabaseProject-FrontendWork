@@ -44,7 +44,7 @@
             <!-- 按钮区域 -->
             <el-form-item class="btns">
               <el-button type="text" @click="toLogin">已有账号，登陆</el-button>
-              <el-button type="primary" @click="register">注册</el-button>
+              <el-button type="primary" @click="register1">注册</el-button>
               <el-button type="info" @click="resetloginForm">重置</el-button>
             </el-form-item>
           </el-tab-pane>
@@ -82,7 +82,7 @@
             <!-- 按钮区域 -->
             <el-form-item class="btns">
               <el-button type="text" @click="toLogin">已有账号，登陆</el-button>
-              <el-button type="primary" @click="register">注册</el-button>
+              <el-button type="primary" @click="register2">注册</el-button>
               <el-button type="info" @click="resetloginForm">重置</el-button>
             </el-form-item>
           </el-tab-pane>
@@ -172,8 +172,8 @@ export default {
       //console.log(this)
       this.$refs.loginFormRef.resetFields();
     },
-    //注册功能
-    register() {
+    //患者注册功能
+    register1() {
       this.$refs.loginForm.validate((valid) => {
         // 获取loginform的实例（el-form），找到validate方法，根据验证规则rules校验是否valid
         if (valid) {
@@ -220,6 +220,55 @@ export default {
         }
       });
     },
+    //医生注册功能
+    register2() {
+      this.$refs.loginForm.validate((valid) => {
+        // 获取loginform的实例（el-form），找到validate方法，根据验证规则rules校验是否valid
+        if (valid) {
+          this.loading = true;
+          this.$axios({
+            method: "post",
+            url: "/api/v1/sign", //改地址
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8", //这是以json字符串的形式发送到后端，要改
+            },
+            data: {
+              name: this.loginForm.username,
+              password: this.loginForm.password,
+              hospital: this.loginForm.hospital,
+            },
+          })
+            .then((res) => {
+              //请求成功后执行函数
+              if (res.data.message === "SUCCESS") {
+                this.$router.push("/login"); //登录验证成功路由实现跳转
+                this.$message({
+                  showClose: true,
+                  message: "注册成功",
+                  type: "success",
+                });
+              } else {
+                this.$notify({
+                  title: "提示",
+                  message: "用户登录失败",
+                  duration: 3000,
+                });
+              }
+            })
+            .catch(() => {
+              his.$notify({
+                title: "提示",
+                message: "用户访问错误",
+                duration: 3000,
+              });
+              console.log(err);
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    }
   },
 };
 </script>
