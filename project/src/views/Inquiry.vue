@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div class="navigation">
+      <div >
+        <img src="https://ui-avatars.com/api/?size=42&rounded=true&background=0D8ABC&color=fff&李华=蓝卡">
+      </div>
+      <inquiry_navigation></inquiry_navigation>
+    </div>
     <div class="text">
       <inquiry_title></inquiry_title>
       <text_box></text_box>
@@ -19,13 +25,15 @@ import text_box from "../components/text_box";
 import inquiry_record from "../components/medicalrecord_form";
 import tabs from "../components/tabs";
 import inquiry_title from "../components/inquiry_title";
+import inquiry_navigation from "../components/inquiry_navigation";
 export default {
   name: "Inquiry",
   components:{
     inquiry_title,
     text_box,
     inquiry_record,
-    tabs
+    tabs,
+    inquiry_navigation
   },
   data(){
     return{
@@ -37,13 +45,16 @@ export default {
 }
 </script>
 <style scoped>
+.navigation{
+  width:5%;
+  height:100%;
+}
 .text{
   position: absolute;
-  padding-left: 3%;
   top:0;
-  left: 0;
+  left: 5%;
   bottom: 0;
-  width: 67%;
+  width: 65%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
   overflow: hidden
 }

@@ -1,15 +1,10 @@
 <template>
   <div class="title">
-    <el-avatar size="mini"> {{user.name}} </el-avatar>
+    <el-image :src="user.pic_url"></el-image>
     <span>{{user.name}}</span>
     <div class="user_pic">
     </div>
     <div class="user_name">
-    </div>
-    <div class="buttoms">
-      <el-button type="primary" icon="el-icon-edit" circle size="small" @click="dealMessage"></el-button>
-      <el-button type="primary" icon="el-icon-picture" circle size="small"></el-button>
-      <el-button type="primary" icon="el-icon-folder" circle size="small"></el-button>
     </div>
   </div>
 </template>
@@ -20,10 +15,16 @@ name: "inquiry_title",
   data(){
     return{
       user:{
-        name:'Patient'
+        name:'李华',
+        pic_url:'https://ui-avatars.com/api/?size=42&rounded=true&name=李'
       }
     }
-  }
+  },
+  methods:{
+    loadPicUrl(){
+
+    }
+  },
 }
 </script>
 
@@ -31,6 +32,7 @@ name: "inquiry_title",
 .title{
   border-bottom: 1px solid #DCDCDC;
   margin-right: 10px;
+
 }
 .user_pic{
   left:40px;

@@ -2,6 +2,7 @@
   <div class="talk_body">
     <div class="talk_show">
       <div class="btalk" v-for="item in text_array"><span>{{item}}</span></div>
+      <div class="btalk" v-for="item in pic_array"><span>{{item}}</span></div>
     </div>
     <div class="talk_input">
       <el-input
@@ -13,7 +14,25 @@
       </el-input>
       <div class="button_show">
         <el-button type="primary" icon="el-icon-edit" circle size="small" @click="dealMessage"></el-button>
-        <el-button type="primary" icon="el-icon-picture" circle size="small"></el-button>
+        <el-upload
+            class="upload-demo"
+            action="uploadPics"
+            :show-file-list="false"
+            :on-success="dealPicture"
+            :file-list="fileList">
+          <img v-if="pic.url" :src="pic.url" class="avatar">
+          <el-button type="primary" icon="el-icon-picture" circle size="small"></el-button>
+        </el-upload>
+        <!--
+  action: 图片上传的地址
+  show-file-list: 是否显示文件上传列表
+  accept: 可接受的上传类型，image/*为图片
+  headers: 头部信息
+  on-success: 上传成功事件
+  on-error: 上传失败事件
+  before-upload: 上传前处理事件，返回一个值，值为false将阻止上传
+  on-progress: 上传中事件
+  -->
         <el-button type="primary" icon="el-icon-folder" circle size="small"></el-button>
       </div>
 
@@ -27,13 +46,23 @@ name: "text_box",
   data() {
     return {
       text_array: [],
-      text: ''
+      text: '',
+      pic_array:[],
+      pic:{
+        name:'',
+        url:''
+      },
+      fileList: [{name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
     }
   },
   methods:{
     dealMessage: function () {
-      this.text_array.push(this.text);
-      this.text = '';
+      if(this.text!='') {
+        this.text_array.push(this.text);
+        this.text = '';
+      }
+    },
+    dealPicture:function (pic){
     }
   }
 };
@@ -79,6 +108,7 @@ name: "text_box",
 }
 
 .button_show{
+  padding-top: 10px;
   left:20px;
   text-align: right;
 }
@@ -95,5 +125,11 @@ name: "text_box",
   border-radius: 10px;
   color: #fff;
   padding: 5px 10px;
+}
+/deep/.upload-demo{
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 50px;
+  display: inline;
 }
 </style>

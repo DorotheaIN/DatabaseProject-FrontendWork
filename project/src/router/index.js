@@ -9,6 +9,7 @@ import text_box from "../components/text_box";
 import medicalrecord_form from "../components/medicalrecord_form";
 import tabs from "../components/tabs";
 import inquiry_title from "../components/inquiry_title";
+import inquiry_navigation from "../components/inquiry_navigation";
 
 Vue.use(VueRouter)
 
@@ -48,6 +49,10 @@ const routes = [
     {
         path:'/inquiry_title',
         component: inquiry_title
+    },
+    {
+        path: '/inquiry_navigation',
+        component: inquiry_navigation
     }
 ]
 

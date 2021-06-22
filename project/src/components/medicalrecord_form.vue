@@ -16,7 +16,7 @@
             class="inline-input"
             v-model="form.disease"
             :fetch-suggestions="querySearchDiseases"
-            placeholder="请输入内容"
+            placeholder=''
             :trigger-on-focus="false"
             @select="handleSelect"
             size="mini"
@@ -27,7 +27,7 @@
             class="inline-input"
             v-model="form.department"
             :fetch-suggestions="querySearchDepartments"
-            placeholder="请输入内容"
+            placeholder=''
             :trigger-on-focus="false"
             @select="handleSelect"
             size="mini"
@@ -65,7 +65,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">生成</el-button>
-        <el-button>清空</el-button>
+        <el-button @click="clearAllContent">清空</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -130,6 +130,12 @@ export default {
     },
     handleSelect(item){
       console.log(item);
+    },
+    clearAllContent(){
+      this.form.desc='';
+      this.form.disease='';
+      this.form.department='';
+      this.form.type='';
     }
 
   },

@@ -4,8 +4,10 @@
       <el-form-item label="患者姓名：">
         <span>{{patient_name}}</span>
       </el-form-item>
-      <el-form-item label="初步诊断：">{{form.disease}}</el-form-item>
-      <el-form-item label="处理意见：">{{form.disease}}</el-form-item>
+      <el-form-item label="初步诊断：">{{disease}}</el-form-item>
+      <el-form-item label="处理意见：">
+
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">生成</el-button>
         <el-button>清空</el-button>
@@ -20,17 +22,12 @@ export default {
   data() {
     return {
       patient_name:'患者A',
-      diseases:[],
+      disease:'风寒',
       departments:[],
       form: {
-        disease: '风寒',
         department:'',
-        date1: '',
-        date2: '',
         delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        treatment:''
       }
     }
   },
@@ -72,6 +69,9 @@ export default {
     },
     handleSelect(item){
       console.log(item);
+    },
+    clearAllContent(){
+      this.form.department='';
     }
 
   },
