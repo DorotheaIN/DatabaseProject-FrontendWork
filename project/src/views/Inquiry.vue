@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="navigation">
-      <div >
-        <img src="https://ui-avatars.com/api/?size=42&rounded=true&background=0D8ABC&color=fff&李华=蓝卡">
+      <div class="image">
+        <img :src="`https://ui-avatars.com/api/?size=60&length=1&bold=true&background=409EFF&color=ffffff&rounded=true&name=${name}`"weight=44px height=44px>
       </div>
       <inquiry_navigation></inquiry_navigation>
     </div>
@@ -37,6 +37,7 @@ export default {
   },
   data(){
     return{
+      name:'医生1',
       text:'',
       textarea2:''
     }
@@ -46,13 +47,17 @@ export default {
 </script>
 <style scoped>
 .navigation{
-  width:5%;
+  width:64px;
   height:100%;
+}
+.image{
+  padding-top: 15px;
+  padding-left: 10px;
 }
 .text{
   position: absolute;
   top:0;
-  left: 5%;
+  left: 64px;
   bottom: 0;
   width: 65%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12);

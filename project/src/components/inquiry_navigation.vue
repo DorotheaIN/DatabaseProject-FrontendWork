@@ -1,7 +1,7 @@
 <template>
 <div>
 
-  <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+  <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" width="76.8px">
     <el-menu-item index="1">
       <i class="el-icon-location"></i>
       <span slot="title">导航一</span>
