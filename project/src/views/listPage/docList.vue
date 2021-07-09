@@ -7,71 +7,78 @@
         @selectData="changeData"
       >
       </myselect>
+      <shop></shop>
     </div>
     <div>
-      <cardList :dataList="docData"> </cardList>
+      <cardList ref="listItem" :dataList="docData">
+        <el-button type="primary" class="button" @click="showForm" >预约</el-button>
+      </cardList>
+      <myform  :isVisible="isFormVisible" @formSubmit='submitForm' @formClose='closeForm'></myform>
     </div>
   </div>
 </template>
 
 <script>
 import cardList from "@/components/cardList.vue";
-//import myselect from "@/components/singleSelect.vue";
-import myselect from '@/components/searchSelect.vue'
+import myselect from "@/components/singleSelect.vue";
+//import myselect from '@/components/searchSelect.vue'
+import myform from "@/components/orderForm.vue";
+import {getDocDataFun,getDocOptionFun} from "@/service/userService.js";
+import shop from '@/components/shopDrawer.vue';
+
 export default {
   name: "DocList",
   components: {
     cardList,
     myselect,
+    myform,
+    shop
   },
   data() {
     return {
       docList: [],
       docData: [],
       options: [],
-      //optionList:[],
+      isFormVisible:false
     };
   },
   created() {
     this.getDataList();
     this.getOptions();
   },
-//   beforeUpdate(){//因为涉及$所以不能在created中 mounted也不行...
-//     this.formOptions();
-//     console.log("刷新");
-//   },
   methods: {
-    getDataList() {
-      this.$http
-        .get("/data/userList.josn")
-        .then((res) => {
-          this.docList = res.data;
-          this.docData = res.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    getDataList(){
+      getDocDataFun(
+      ).then(res=>{
+        this.docList = res.result;
+        this.docData = res.result;
+      }).catch(err=>{
+         console.log(err);
+      });
     },
-    getOptions() {
-      this.$http
-        .get("/data/selectOption.josn")
-        .then((res) => {
-          //this.options = res.data;
-          this.options = res.data.map((item) => {
-          return { value: `${item}`, label: `${item}` };
-          });
-        })
-        .catch((err) => {
-          console.log(err);
+    getOptions(){
+      getDocOptionFun().then(res=>{
+        this.options = res.result.map((item) => {
+        return { value: `${item}`, label: `${item}` };
         });
+      }).catch(err=>{
+        console.log(err);
+      });
     },
-    // formOptions() {
-    //   this.optionList = this.options.map((item) => {
-    //       return { value: `${item}`, label: `${item}` };
-    //       });
-    // },
     changeData(newdata) {
       this.docData = newdata;
+    },
+    showForm(mes){
+      this.isFormVisible = true
+      this.$refs.listItem.recordLocation(mes)
+    },
+    closeForm(){
+      this.isFormVisible = false
+    },
+    submitForm(mes){
+      mes.docId = this.$refs.listItem.lastCardInfo._id
+      mes.docName = this.$refs.listItem.lastCardInfo._name
+      console.log(mes);
     },
   },
 };
