@@ -8,7 +8,7 @@
         :offset="1"
       >
         <div>
-          <el-card :body-style="{ padding: '0px' }" shadow="hover">
+          <el-card :body-style="{ padding: '0px' }" shadow="hover" >
             <div class="image-zone">
               <el-avatar
                 :size="100"
@@ -18,9 +18,10 @@
               ></el-avatar>
             </div>
             <span>{{ item.info.name }}</span>
+            <span id='hiding-id' v-show="false">{{item.id}}</span>
             <div class="botton-zone">
               <el-button-group>
-                <el-button type="primary" class="button">预约</el-button>
+                <slot></slot>
                 <el-button type="primary" class="button" @click="showDialog(),getDetail(item)">详细</el-button>
               </el-button-group>
             </div>
@@ -93,6 +94,10 @@ export default {
       pagesize: 8,
       isDialogVisible:false,
       diaData:{},
+      lastCardInfo:{
+        _id: -1,
+        _name:' '
+      }
     };
   },
   props:{
@@ -116,12 +121,18 @@ export default {
     showDialog(){
       this.isDialogVisible = true;
     },
-    changeDialog(mes){
-      if (mes === false)  this.isDialogVisible = false;
-      else this.isDialogVisible = true;
+    changeDialog(){
+      this.isDialogVisible = false
     },
     getDetail(item) {
+      console.log(item.id)
       this.diaData = item.info
+    },
+    recordLocation(mes){
+      this.lastCardInfo._id = Number(mes.currentTarget.parentElement
+                        .parentElement.parentElement.childNodes[2].innerHTML)
+      this.lastCardInfo._name = mes.currentTarget.parentElement
+                        .parentElement.parentElement.childNodes[1].innerHTML
     },
   },
   watch: {
