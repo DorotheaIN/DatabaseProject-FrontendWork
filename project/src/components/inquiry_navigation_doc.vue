@@ -103,7 +103,7 @@ export default {
       this.formReport.desc='';
     },
     quit(){
-      this.$router.push('/doc_card');
+      this.$router.push('/Home');
     }
   }
 }
