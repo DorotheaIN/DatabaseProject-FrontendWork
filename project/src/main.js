@@ -10,14 +10,11 @@ import 'element-ui/lib/theme-chalk/index.css';
 //import { axios } from './axios/axios.js';
 import Vuex from 'vuex'
 
-<<<<<<< HEAD
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios
-=======
 
 Vue.use(ElementUI)
 
->>>>>>> dzy
 Vue.config.productionTip = false
 
 //Vue.use(VueAxios, axios)
