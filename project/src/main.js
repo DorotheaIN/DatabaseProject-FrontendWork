@@ -5,8 +5,9 @@ import store from './store'
 import ElementUI from 'element-ui';
 import axios from "axios";
 import 'element-ui/lib/theme-chalk/index.css';
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+//import axios from 'axios'
+//import VueAxios from 'vue-axios'
+//import { axios } from './axios/axios.js';
 import Vuex from 'vuex'
 
 <<<<<<< HEAD
@@ -19,8 +20,8 @@ Vue.use(ElementUI)
 >>>>>>> dzy
 Vue.config.productionTip = false
 
-Vue.use(VueAxios, axios)
-Vue.$http=axios
+//Vue.use(VueAxios, axios)
+//Vue.$http=axios
 
 Vue.use(Vuex)
 

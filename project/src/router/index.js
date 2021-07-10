@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+<<<<<<< HEAD
 import Home from '../views/Home.vue'
 <<<<<<< HEAD
 import Inquiry from '../views/Inquiry.vue'
@@ -16,34 +17,60 @@ const routes = [
  },
 =======
 import Test from '../views/Test.vue'
+=======
+>>>>>>> dzy
 import  DocList from '../views/listPage/docList.vue'
+import  Navigation from '../components/Navigation.vue'
+import online from '../views/listPage/online.vue'
+import offline from '../views/listPage/offline.vue'
+import mall from '../views/listPage/mall.vue'
+import diseaseInfo from '../views/listPage/diseaseInfo.vue'
+import Home from '../views/listPage/Home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/Navigation',
+    name: 'Navigation',
+    component: Navigation
+  },
+  {
+    path: '/Home',
     name: 'Home',
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/mall',
+    name: 'mall',
+    component: mall
   },
   {
-    path: '/test',
-    name: 'Test',
-    component: Test
+    path: '/diseaseInfo',
+    name: 'diseaseInfo',
+    component: diseaseInfo
   },
+ 
+  {
+    path: '/online',
+    name: 'online',
+    component: online
+  },
+  {
+    path: '/offline',
+    name: 'offline',
+    component: offline
+  },
+ 
   {
     path: '/listPage/docList',
     name: 'DocList',
     component: DocList
+<<<<<<< HEAD
   }
+>>>>>>> dzy
+=======
+  },
 >>>>>>> dzy
 ]
 
