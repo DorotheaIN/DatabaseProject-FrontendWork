@@ -1,25 +1,36 @@
 <template>
   <div id="app">
-<<<<<<< HEAD
-    <router-view></router-view>
-=======
-  
     <router-view/>
->>>>>>> 3b3af58821a501a93f759725331abe66b8e7595e
   </div>
 </template>
 
 <style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /*text-align: center;*/
+  color: #2c3e50;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
 html,body,#app{
   height: 100%;
   padding: 0;
   margin: 0;
 }
-</style>
 
-<script>
-export default{
-   name: 'app'
+#nav {
+  padding: 30px;
 }
 
-</script>
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
+</style>

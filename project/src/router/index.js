@@ -1,25 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Inquiry from '../views/Inquiry.vue'
-import Test from '../views/Test.vue'
 import  DocList from '../views/listPage/docList.vue'
 import  Navigation from '../components/Navigation.vue'
 import online from '../views/listPage/online.vue'
 import offline from '../views/listPage/offline.vue'
 import mall from '../views/listPage/mall.vue'
 import diseaseInfo from '../views/listPage/diseaseInfo.vue'
+import Home from '../views/listPage/Home.vue'
+import InquiryBelongDoc from "../views/listPage/Inquiry.vue";
+import InquiryBelongPatient from "../views/listPage/InquiryPatient";
 Vue.use(VueRouter)
 
 const routes = [
- {
-    path:'/Home',
-    component:Home
- },
- {
-    path:'/Inquiry',
-    component:Inquiry
- },
   {
     path: '/Navigation',
     name: 'Navigation',
@@ -56,11 +48,21 @@ const routes = [
     path: '/listPage/docList',
     name: 'DocList',
     component: DocList
-  },]
+  },
+  {
+    path:'/InquiryBelongDoc',
+    name:'InquiryBelongDoc',
+    component: InquiryBelongDoc
+  },
+  {
+    path:'/InquiryBelongPatient',
+    name:'InquiryBelongPatient',
+    component: InquiryBelongPatient
+  }
+]
 
 const router = new VueRouter({
-  routes,
-    mode: 'history'
+  routes
 })
 
 export default router

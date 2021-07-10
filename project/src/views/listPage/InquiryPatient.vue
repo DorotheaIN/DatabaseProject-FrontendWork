@@ -17,15 +17,14 @@
     </div>
   </div>
 
-
 </template>
 
 <script>
-import text_box from "../components/text_box";
-import inquiry_record from "../components/medicalrecord_form";
-import tabs_patient from "../components/tabs_patient";
-import inquiry_title from "../components/inquiry_title";
-import inquiry_navigation_patient from "../components/inquiry_navigation_patient";
+import text_box from "@/components/text_box";
+import inquiry_record from "@/components/medicalrecord_form";
+import tabs_patient from "@/components/tabs_patient";
+import inquiry_title from "@/components/inquiry_title";
+import inquiry_navigation_patient from "@/components/inquiry_navigation_patient";
 export default {
   name: "InquiryPatient",
   components:{

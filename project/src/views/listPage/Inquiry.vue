@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import text_box from "../components/text_box";
-import inquiry_record from "../components/medicalrecord_form";
-import tabs from "../components/tabs";
-import inquiry_title from "../components/inquiry_title";
-import inquiry_navigation_doc from "../components/inquiry_navigation_doc";
+import text_box from "@/components/text_box";
+import inquiry_record from "@/components/medicalrecord_form";
+import tabs from "@/components/tabs";
+import inquiry_title from "@/components/inquiry_title";
+import inquiry_navigation_doc from "@/components/inquiry_navigation_doc";
 export default {
   name: "Inquiry",
   components:{
@@ -48,6 +48,7 @@ export default {
 }
 </script>
 <style scoped>
+
 .navigation{
   position: absolute;
   top:10px;

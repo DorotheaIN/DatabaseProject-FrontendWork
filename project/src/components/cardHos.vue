@@ -90,6 +90,9 @@
   top:30px;
   right:10%
 }
+.box-card{
+  text-align: center;
+}
 </style>
 
 <script>
