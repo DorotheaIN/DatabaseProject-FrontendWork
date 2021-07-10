@@ -35,32 +35,32 @@
       </el-form-item>
       <el-form-item label="相应症状：">
         <el-checkbox-group v-model="form.type">
-          <el-checkbox label="头痛" name="type"></el-checkbox>
-          <el-checkbox label="头昏" name="type"></el-checkbox>
-          <el-checkbox label="心悸" name="type"></el-checkbox>
-          <el-checkbox label="胸闷" name="type"></el-checkbox>
-          <el-checkbox label="胸痛" name="type"></el-checkbox>
-          <el-checkbox label="发热" name="type"></el-checkbox>
-          <el-checkbox label="咳嗽" name="type"></el-checkbox>
-          <el-checkbox label="咳痰" name="type"></el-checkbox>
-          <el-checkbox label="鼻衄" name="type"></el-checkbox>
-          <el-checkbox label="耳鸣" name="type"></el-checkbox>
-          <el-checkbox label="眼花" name="type"></el-checkbox>
-          <el-checkbox label="乏力" name="type"></el-checkbox>
-          <el-checkbox label="消瘦" name="type"></el-checkbox>
-          <el-checkbox label="浮肿" name="type"></el-checkbox>
-          <el-checkbox label="呕吐" name="type"></el-checkbox>
-          <el-checkbox label="尿痛" name="type"></el-checkbox>
-          <el-checkbox label="便秘" name="type"></el-checkbox>
-          <el-checkbox label="腹泻" name="type"></el-checkbox>
-          <el-checkbox label="多饮" name="type"></el-checkbox>
-          <el-checkbox label="多食" name="type"></el-checkbox>
-          <el-checkbox label="多尿" name="type"></el-checkbox>
-          <el-checkbox label="皮疹" name="type"></el-checkbox>
-          <el-checkbox label="呼吸困难" name="type"></el-checkbox>
-          <el-checkbox label="关节肿痛" name="type"></el-checkbox>
-          <el-checkbox label="视力模糊" name="type"></el-checkbox>
-          <el-checkbox label="四肢麻木" name="type"></el-checkbox>
+          <el-checkbox label="头痛"></el-checkbox>
+          <el-checkbox label="头昏"></el-checkbox>
+          <el-checkbox label="心悸"></el-checkbox>
+          <el-checkbox label="胸闷"></el-checkbox>
+          <el-checkbox label="胸痛"></el-checkbox>
+          <el-checkbox label="发热"></el-checkbox>
+          <el-checkbox label="咳嗽"></el-checkbox>
+          <el-checkbox label="咳痰"></el-checkbox>
+          <el-checkbox label="鼻衄"></el-checkbox>
+          <el-checkbox label="耳鸣"></el-checkbox>
+          <el-checkbox label="眼花"></el-checkbox>
+          <el-checkbox label="乏力"></el-checkbox>
+          <el-checkbox label="消瘦"></el-checkbox>
+          <el-checkbox label="浮肿"></el-checkbox>
+          <el-checkbox label="呕吐"></el-checkbox>
+          <el-checkbox label="尿痛"></el-checkbox>
+          <el-checkbox label="便秘"></el-checkbox>
+          <el-checkbox label="腹泻"></el-checkbox>
+          <el-checkbox label="多饮"></el-checkbox>
+          <el-checkbox label="多食"></el-checkbox>
+          <el-checkbox label="多尿"></el-checkbox>
+          <el-checkbox label="皮疹"></el-checkbox>
+          <el-checkbox label="呼吸困难"></el-checkbox>
+          <el-checkbox label="关节肿痛"></el-checkbox>
+          <el-checkbox label="视力模糊"></el-checkbox>
+          <el-checkbox label="四肢麻木"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item>
@@ -77,18 +77,16 @@ export default {
   name: "inquiry_record",
   data() {
     return {
-      patient_name:'患者A',
+      patient_name:'患者A',//患者姓名
       diseases:[],
       departments:[],
       form: {
-        disease: '',
-        department:'',
-        date1: '',
-        date2: '',
+        disease: '',//疾病
+        department:'',//科室
         delivery: false,
-        type: [],
+        type: [],//症状
         resource: '',
-        desc: ''
+        desc: ''//主诉
       }
     }
   },

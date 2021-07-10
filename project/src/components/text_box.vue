@@ -16,15 +16,20 @@
         <el-button type="primary" icon="el-icon-edit" circle size="small" @click="dealMessage"></el-button>
         <el-upload
             class="upload-demo"
-            action="uploadPics"
-            :show-file-list="false"
-            :on-success="dealPicture"
-            :file-list="fileList">
-          <img v-if="pic.url" :src="pic.url" class="avatar">
+            action="http://localhost:8080/Inquiry"
+            :show-file-list="true"
+            :on-success="handUpLoadSuccess"
+            :on-preview="handlePreview"
+            :before-upload="beforeUpload"
+            :file-list="fileList"
+            :auto-upload="false">
           <el-button type="primary" icon="el-icon-picture" circle size="small"></el-button>
         </el-upload>
         <!--
-  action: 图片上传的地址
+        <img v-if="pic.url" :src="pic.url" class="avatar">
+        :data="Pic"
+        :before-upload="beforeUpload"
+  action: 图片上传的地址????????????????????????????????????????????????????
   show-file-list: 是否显示文件上传列表
   accept: 可接受的上传类型，image/*为图片
   headers: 头部信息
@@ -33,37 +38,74 @@
   before-upload: 上传前处理事件，返回一个值，值为false将阻止上传
   on-progress: 上传中事件
   -->
-        <el-button type="primary" icon="el-icon-folder" circle size="small"></el-button>
+<!--        <el-upload-->
+<!--            class="upload-demo"-->
+<!--            ref="upload"-->
+<!--            action="https://jsonplaceholder.typicode.com/posts/"-->
+<!--            :on-preview="handlePreview"-->
+<!--            :before-upload="beforeUpload"-->
+<!--            :file-list="fileList"-->
+<!--            :auto-upload="false">-->
+<!--          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>-->
+<!--          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+<!--        </el-upload>-->
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
+const axios = require('axios');
 export default {
 name: "text_box",
   data() {
     return {
+
       text_array: [],
       text: '',
-      pic_array:[],
-      pic:{
-        name:'',
-        url:''
+      pic_array: [],
+      dataObj: {
+        url: ''
       },
-      fileList: [{name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+      fileList:[]
     }
   },
   methods:{
+    handlePreview(file) {
+      console.log(file);
+    },
     dealMessage: function () {
       if(this.text!='') {
         this.text_array.push(this.text);
         this.text = '';
+        console.log(this.text_array);
       }
     },
-    dealPicture:function (pic){
+    handUpLoadSuccess:function (res,file){
+      let _this=this;
+      console.log(res,file);
+      _this.dataObj.url=URL.createObjectURL(file.raw);
+      console.log(_this.dataObj.url);
+    },
+    beforeUpload(file){
+      console.log(file);
     }
+
+    /*
+    beforeUpload:function (file){
+
+      let api = "http://localhost:8080/Inquiry";
+      let fd = new FormData();
+      fd.append('file',file);//传文件
+      // fd.append('srid',this.upLoadData.srid);//传其他参数
+      console.log(api);
+      this.$axios.post(api,fd).then(function(res){
+        console.log('成功');
+      })
+      return falseww
+    }
+    */
+
   }
 };
 </script>
@@ -111,6 +153,7 @@ name: "text_box",
   padding-top: 10px;
   left:20px;
   text-align: right;
+  bottom:0px;
 }
 
 

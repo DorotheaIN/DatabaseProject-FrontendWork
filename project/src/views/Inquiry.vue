@@ -2,9 +2,9 @@
   <div>
     <div class="navigation">
       <div class="image">
-        <img :src="`https://ui-avatars.com/api/?size=60&length=1&bold=true&background=409EFF&color=ffffff&rounded=true&name=${name}`"weight=44px height=44px>
+        <img :src="`https://ui-avatars.com/api/?size=60&length=1&bold=true&background=409EFF&color=ffffff&rounded=true&name=${user.name}`"weight=44px height=44px>
       </div>
-      <inquiry_navigation></inquiry_navigation>
+      <inquiry_navigation_doc></inquiry_navigation_doc>
     </div>
     <div class="text">
       <inquiry_title></inquiry_title>
@@ -25,7 +25,7 @@ import text_box from "../components/text_box";
 import inquiry_record from "../components/medicalrecord_form";
 import tabs from "../components/tabs";
 import inquiry_title from "../components/inquiry_title";
-import inquiry_navigation from "../components/inquiry_navigation";
+import inquiry_navigation_doc from "../components/inquiry_navigation_doc";
 export default {
   name: "Inquiry",
   components:{
@@ -33,11 +33,13 @@ export default {
     text_box,
     inquiry_record,
     tabs,
-    inquiry_navigation
+    inquiry_navigation_doc
   },
   data(){
     return{
-      name:'医生1',
+      user:{
+        name:'医生1'
+      },
       text:'',
       textarea2:''
     }
@@ -47,8 +49,9 @@ export default {
 </script>
 <style scoped>
 .navigation{
+  position: absolute;
+  top:10px;
   width:64px;
-  height:100%;
 }
 .image{
   padding-top: 15px;

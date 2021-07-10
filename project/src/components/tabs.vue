@@ -11,7 +11,7 @@
         查看照片
       </el-tab-pane>
       <el-tab-pane label="患者信息" name="fourth">
-        患者信息
+        <patient_information></patient_information>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -21,6 +21,7 @@
 <script>
 import medicalrecord_form from "./medicalrecord_form";
 import prescription_form from "./prescription_form";
+import patient_information from "./patient_info";
 export default {
 name: "tabs",
   data() {
@@ -30,7 +31,8 @@ name: "tabs",
   },
   components:{
     medicalrecord_form,
-    prescription_form
+    prescription_form,
+    patient_information
   },
   methods: {
     handleClick(tab, event) {

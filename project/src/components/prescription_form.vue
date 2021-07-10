@@ -4,9 +4,11 @@
       <el-form-item label="患者姓名：">
         <span>{{patient_name}}</span>
       </el-form-item>
-      <el-form-item label="初步诊断：">{{disease}}</el-form-item>
-      <el-form-item label="处理意见：">
-
+      <el-form-item label-position="top"  label="初步诊断：">{{disease}}</el-form-item>
+    </el-form>
+    <el-form label-position="top" ref="form" :model="form" size="mini" label-width="90px" >
+      <el-form-item  label="处理意见：">
+          <medicine_form></medicine_form>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">生成</el-button>
@@ -17,8 +19,12 @@
 </template>
 
 <script>
+import medicine_form from "./medicine_form";
 export default {
   name: "prescription_form",
+  components:{
+    medicine_form
+  },
   data() {
     return {
       patient_name:'患者A',
@@ -97,5 +103,8 @@ export default {
 }
 /deep/.el-form-item--mini.el-form-item{
   margin-bottom: 6px;
+}
+/deep/.el-form--label-top .el-form-item__label{
+  padding-left: 10px;
 }
 </style>

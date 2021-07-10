@@ -9,8 +9,8 @@ import text_box from "../components/text_box";
 import medicalrecord_form from "../components/medicalrecord_form";
 import tabs from "../components/tabs";
 import inquiry_title from "../components/inquiry_title";
-import inquiry_navigation from "../components/inquiry_navigation";
-
+import inquiry_navigation from "../components/inquiry_navigation_patient";
+import InquiryPatient from "../views/InquiryPatient";
 Vue.use(VueRouter)
 
 const routes = [
@@ -27,8 +27,8 @@ const routes = [
    component:doc_card
  },
  {
-  path:'/hos_card',
-  component:hos_card
+  path:'/InquiryPatient',
+  component:InquiryPatient
 },
     {
         path:'/Inquiry',
@@ -57,7 +57,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+    mode: 'history'
 })
 
 export default router

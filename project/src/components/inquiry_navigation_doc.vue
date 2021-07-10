@@ -8,7 +8,7 @@
         <i class="el-icon-location"></i>
         <span slot="title">举报</span>
       </el-menu-item>
-      <el-dialog title="举报医生" center :visible.sync="dialogReportVisible" width="30%">
+      <el-dialog title="举报患者" center :visible.sync="dialogReportVisible" width="30%">
         <el-form :model="formReport">
           <el-form-item label="举报类型" :label-width="formLabelWidth">
             <el-radio v-model="radio" label="1">言论侮辱</el-radio>
@@ -33,10 +33,10 @@
         <i class="el-icon-document"></i>
         <span slot="title">退出</span>
       </el-menu-item>
-      <el-menu-item index="4">
-        <i class="el-icon-setting"></i>
-        <span slot="title">导航四</span>
-      </el-menu-item>
+<!--      <el-menu-item index="4">-->
+<!--        <i class="el-icon-setting"></i>-->
+<!--        <span slot="title">导航四</span>-->
+<!--      </el-menu-item>-->
     </el-menu>
   </div>
 </template>

@@ -1,9 +1,10 @@
 <template>
   <div class="title">
     <div class="image">
-      <img :src="`https://ui-avatars.com/api/?size=60&length=1&bold=true&background=409EFF&color=ffffff&rounded=true&name=${name}`"weight=44px height=44px>
-      <span>{{user.name}}</span>
+<!--        <img :src="`https://ui-avatars.com/api/?size=56&length=1&bold=true&background=409EFF&color=ffffff&rounded=true&name=${user.name}`"weight=44px height=44px>-->
+        <span class="test">{{user.name}}</span>
     </div>
+
   </div>
 </template>
 
@@ -13,8 +14,8 @@ name: "inquiry_title",
   data(){
     return{
       user:{
-        name:'病人',
-        pic_url:'https://ui-avatars.com/api/?size=42&rounded=true&name=李'
+        name:'患者A',
+        oppositeName:'医生A'
       }
     }
   },
@@ -28,15 +29,23 @@ name: "inquiry_title",
 
 <style scoped>
 .title{
+  margin-top: 20px;
   border-bottom: 1px solid #DCDCDC;
   margin-right: 10px;
-
+  margin-left: 10px;
 }
 .image{
-  padding-left:14px;
+  padding-left:400px;
+  padding-bottom: 5px;
 }
-.image span{
-  bottom: 14px;
+img{
+  vertical-align:middle;
+}
+.test{
+  font-size: 23px;
+  padding-left: 10px;
+  height: 30px;
+  line-height: 30px;
 }
 .user_pic{
   left:40px;
