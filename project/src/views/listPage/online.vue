@@ -1,41 +1,69 @@
 <template>
   <div class="docList">
     <Navigation></Navigation>
-    <div>
+    <div class="select">
       <myselect
         :selectedOptions="options"
         :selectedData="docList"
         @selectData="changeData"
       >
       </myselect>
-      <shop></shop>
+      <!-- <shop></shop> -->
     </div>
-    <div>
+    <div class="search">
+        <mysearch></mysearch>
+    </div>
+    <div class="card">
       <cardList ref="listItem" :dataList="docData">
         <el-button type="primary" class="button" @click="showForm" >预约</el-button>
       </cardList>
-      <myform  :isVisible="isFormVisible" @formSubmit='submitForm' @formClose='closeForm'></myform>
+
+      <myform  :isVisible="isFormVisible" @formSubmit='submitForm' @formClose='closeForm' ></myform>
     </div>
   </div>
 </template>
+
+<style scoped>
+.select{
+    position: absolute;
+    left:17%;
+    top:18%
+}
+.card{
+    position:absolute;
+    left:14%;
+    top:23%
+}
+.search{
+    position:absolute;
+    left:45%;
+    top:18%
+}
+.page{
+    position: absolute;
+    left:70%;
+    top:100%
+}
+</style>
 
 <script>
 import Navigation from "@/components/Navigation.vue";
 import cardList from "@/components/cardList.vue";
 import myselect from "@/components/singleSelect.vue";
-//import myselect from '@/components/searchSelect.vue'
+import mysearch from '@/components/searchingSelect.vue'
 import myform from "@/components/orderForm.vue";
 import {getDocDataFun,getDocOptionFun} from "@/service/userService.js";
 import shop from '@/components/shopDrawer.vue';
 
 export default {
-  name: "DocList",
+  name: "online",
   components: {
     cardList,
     myselect,
     myform,
     shop,
-    Navigation
+    Navigation,
+    mysearch
   },
   data() {
     return {

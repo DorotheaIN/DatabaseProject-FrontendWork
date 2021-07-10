@@ -4,10 +4,13 @@
     filterable
     remote
     placeholder="请输入关键词"
+    prefix-icon="el-icon-search"
     :remote-method="remoteMethod"
+     style="width:560px"
     :loading="loading"
     @change="filterData(selectedValue)"
   >
+  <i slot="prefix" class="el-input__icon el-icon-search"></i>
     <el-option
       v-for="item in options"
       :key="item.value"
@@ -17,6 +20,10 @@
     </el-option>
   </el-select>
 </template>
+
+<style scoped>
+
+</style>
 
 <script>
 export default {

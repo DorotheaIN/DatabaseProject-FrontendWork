@@ -17,7 +17,7 @@
                 shape="circle"
                 fit="contain"
               ></el-avatar> -->
-              <img :src="`https://ui-avatars.com/api/?size=60&length=1&bold=true&background=6699CC&color=ffffff&rounded=true&name=${item.info.name}`" weight=70px height=70px>
+              <img src="../assets/hospital.jpg" weight=200px height=100px>
             </div>
             <span>{{ item.info.name }}</span>
             <p>{{ item.info.level|1 }}</p>
@@ -96,7 +96,7 @@
 import infoDialog from "./dialog.vue";
 
 export default {
-  name: "cardList",
+  name: "cardHos",
   data() {
     return {
       url: "`https://ui-avatars.com/api/?size=80&length=1&bold=true&background=409EFF&color=ffffff&rounded=true&name=${diaData.info.name}`",
