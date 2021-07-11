@@ -1,0 +1,9 @@
+1.新建Vue项目
+2.
+npm install less less-loader --save-dev
+npm i element-ui -S
+3.
+npm install webpack -g
+npm install --global vue-cli
+4.view 新建页
+routes配路由
