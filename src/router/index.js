@@ -18,6 +18,7 @@ const router = new VueRouter({
   //mode:"history"   //去掉#，不确定改不改，首页重定向的问题
 })
 
+
 /*
 //挂载路由导航守卫
 router.beforeEach((to,from,next)=> {
@@ -26,6 +27,7 @@ router.beforeEach((to,from,next)=> {
   //next 是一个函数，表示放行
   //next()放行 next('/login)强制跳转
   if(to.path==='/login') return next();
+  if(to.path==='/register') return next();
   const tokenStr=window.sessionStorage.getItem('token')
   if(!tokenStr) return next('/login')
   next()

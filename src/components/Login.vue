@@ -35,7 +35,7 @@
             </el-form-item>
             <!-- 按钮区域 -->
             <el-form-item class="btns">
-              <el-button type="primary" @click="login">登录</el-button>
+              <el-button type="primary" @click="Plogin">登录</el-button>
               <el-button type="primary" @click="toRegister">注册</el-button>
               <el-button type="info" @click="resetloginForm">重置</el-button>
             </el-form-item>
@@ -58,7 +58,7 @@
             </el-form-item>
             <!-- 按钮区域 -->
             <el-form-item class="btns">
-              <el-button type="primary" @click="login">登录</el-button>
+              <el-button type="primary" @click="Dlogin">登录</el-button>
               <el-button type="primary" @click="toRegister">注册</el-button>
               <el-button type="info" @click="resetloginForm">重置</el-button>
             </el-form-item>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { loginPFun,loginDFun } from "../service/userService.js"
 export default {
   data() {
     return {
@@ -80,9 +81,9 @@ export default {
       },
       //这是表单的验证规则对象
       loginFormRules: {
-        //验证用户名是否合法
+        //验证用户ID是否合法
         username: [
-          { required: true, message: "请输入用户名称", trigger: "blur" },
+          { required: true, message: "请输入用户ID", trigger: "blur" },
           {
             min: 3,
             max: 10,
@@ -108,23 +109,75 @@ export default {
   methods: {
     //点击重置按钮，重置登录
     resetloginForm() {
-      //console.log(this)
       this.$refs.loginFormRef.resetFields();
     },
-    login() {
-      this.$refs.loginFormRef.validate(async (valid) => {
-        if (!valid) return;
-        const { data: res } = await this.$http.post("login", this.loginForm); //替换"login"
-        if (res.meta.status !== 200)
-          //return this.$message.error("登录失败！");
-          this.$message.success("登录成功!");
-        // 1. 将登陆成功之后的token，保存到客户端的sessionStorage中
-        //  1.1 项目中除了登录之外的其他API接口，必须在登录之后才能访问
-        //  1.2 token只应在当前网站打开期间生效，所以将token保存在sessionStorage
-        window.sessionStorage.setItem("token", res.data.token);
-        // 2. 通过编程式导航跳转到后台主页，路由地址是 /home
-        this.$router.push("/home");
-      });
+    //患者登录
+    Plogin() {
+      loginPFun({
+        id: this.loginForm.username,
+        password: this.loginForm.password,
+      })
+        .then((res) => {
+           if (res.result === true){
+          //window.sessionStorage.setItem("token", res.data.token);
+          this.$notify({
+            title: "提示",
+            message: "用户登录成功",
+            duration: 3000,
+          });
+          this.$router.push("/home");
+          }
+          else  {
+            this.$notify({
+              title: "提示",
+              message: "用户登录失败",
+              duration: 3000,
+            });
+          }
+          console.log(res);
+        })
+        .catch((err) => {
+          this.$notify({
+            title: "提示",
+            message: "用户登录失败",
+            duration: 3000,
+          });
+          console.log(err);
+        });
+    },
+
+    Dlogin() {
+        loginDFun({
+        id: this.loginForm.username,
+        password: this.loginForm.password,
+      })
+        .then((res) => {
+           if (res.result === true){
+          //window.sessionStorage.setItem("token", res.data.token);
+          this.$notify({
+            title: "提示",
+            message: "用户登录成功",
+            duration: 3000,
+          });
+          this.$router.push("/home");
+          }
+          else  {
+            this.$notify({
+              title: "提示",
+              message: "用户登录失败",
+              duration: 3000,
+            });
+          }
+          console.log(res);
+        })
+        .catch((err) => {
+          this.$notify({
+            title: "提示",
+            message: "用户登录失败",
+            duration: 3000,
+          });
+          console.log(err);
+        });     
     },
     toRegister() {
       this.$router.push("/register");

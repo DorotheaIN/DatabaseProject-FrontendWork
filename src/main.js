@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import 'element-ui/lib/theme-chalk/index.css'
 
 //导入全局样式表
@@ -11,6 +13,8 @@ import './assets/css/global.css'
 Vue.config.productionTip = false
 
 Vue.use(ElementUI);
+
+Vue.use(VueAxios,axios);
 
 new Vue({
   router,
