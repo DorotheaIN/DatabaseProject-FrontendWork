@@ -4,11 +4,12 @@
 import axios from 'axios'; //https://www.kancloud.cn/yunye/axios/234845
 import router from '../router';
 import Vue from 'vue';
+import qs from 'qs';
 //import store from '../store/index';
 
 //import Storage from '../utils/storages';
 
-//code改为status 
+//code改为status
 
 // 错误状态码处理提示
 class MessageTip extends Vue {
@@ -83,15 +84,28 @@ class MessageTip extends Vue {
 
 const messageTip = new MessageTip();
 
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+//axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers.post['Content-Type'] = 'application/json';//改？
+//axios.defaults.headers.post['Content-Type'] = 'text/plain';//改？
+
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = '/api';
 axios.defaults.timeout = 5000;
 // 请求拦截器
 axios.interceptors.request.use(
   config => {
-    // 登陆验证
-    config.headers.token = localStorage.getItem('$token_info');
+    if(config.method === 'post') {
+      config.data = qs.stringify(config.data)
+      config.url += '?' + config.data
+    }
+    else {
+      config.params = qs.stringify(config.params)
+      config.url += '?' + config.params
+    }
+    console.log(config)
+    //config.data = qs.stringify(config.data)
+    //config.url += '?' + config.data
+    //config.headers.token = localStorage.getItem('$token_info');
     return config;
   },
   error => {
@@ -102,6 +116,10 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
   response => {
+    response.data = {
+      result:response.data,
+      code:`${response.status}`
+    }
     if (
       response &&
       response.data &&
@@ -115,14 +133,18 @@ axios.interceptors.response.use(
         router.push('/login');
       }, 1000);
     }
-    if (response && response.data && response.data.code !== '200') {//加个code吧
+    if (response && response.data && response.data.code !== '200') {//后端数据无状态码 统一改成status
       response.data.msg && messageTip.msgInfo(response.data.msg);
+      console.log(response)
       //store.commit('base/updateLoadingStatus', { isLoading: false }); //关闭loading
       return Promise.reject(response.data);
     }
+    //console.log(response.data)
     return response.data;
   },
   error => {
+    console.log(error)
+    console.log(error.response)
     if (
       error &&
       error.response &&

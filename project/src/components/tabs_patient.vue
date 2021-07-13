@@ -1,22 +1,22 @@
 <template>
   <div class="tabs">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="查看病历" name="first">
-        <el-form ref="form1" :model="form1" size="mini" label-width="90px" >
+    <el-tabs v-model="activeName" >
+      <el-tab-pane label="查看病历" name="first" >
+        <el-form :model="diseaseDecidedForm" size="mini" label-width="90px" >
           <el-form-item label="患者姓名：">
-            <span>{{patient_name}}</span>
+            <span>{{diseaseDecidedForm.patientName}}</span>
           </el-form-item>
           <el-form-item label="患者主诉：">
-            <span>{{form1.desc}}</span>
+            <span>{{diseaseDecidedForm.desc}}</span>
           </el-form-item>
           <el-form-item label="诊断疾病：">
-            <span>{{disease}}</span>
+            <span>{{diseaseDecidedForm.disease}}</span>
           </el-form-item>
           <el-form-item label="所属科室：">
-            <span>{{form1.department}}</span>
+            <span>{{diseaseDecidedForm.department}}</span>
           </el-form-item>
           <el-form-item label="相应症状：">
-            <el-checkbox-group v-model="form1.checkList" disabled>
+            <el-checkbox-group v-model="diseaseDecidedForm.type" disabled>
               <el-checkbox label="头痛"></el-checkbox>
               <el-checkbox label="头昏"></el-checkbox>
               <el-checkbox label="心悸"></el-checkbox>
@@ -46,21 +46,25 @@
             </el-checkbox-group>
           </el-form-item>
         </el-form>
+        <el-form :model="buttonForm" size="mini" label-width="90px" :disabled="preButtonDiabled">
+          <div class="button">
+            <el-button size="medium" type="primary" @click="getPre">生成</el-button>
+          </div>
+        </el-form>
       </el-tab-pane>
 
-
-      <el-tab-pane label="查看处方" name="second">
+      <el-tab-pane label="查看处方"  name="second" :disabled="includeTabDisabled" >
         <div class="form_body">
-          <el-form ref="form" :model="form" size="mini" label-width="90px" >
+          <el-form :model="includeForm" size="mini" label-width="90px" >
             <el-form-item label="患者姓名：">
-              <span>{{patient_name}}</span>
+              <span>{{diseaseDecidedForm.patientName}}</span>
             </el-form-item>
-            <el-form-item label-position="top"  label="初步诊断：">{{disease}}</el-form-item>
+            <el-form-item label-position="top"  label="初步诊断：">{{diseaseDecidedForm.disease}}</el-form-item>
           </el-form>
-          <el-form label-position="top" ref="form" :model="form" size="mini" label-width="90px" >
+          <el-form label-position="top" :model="includeForm" size="mini" label-width="90px" >
             <el-form-item  label="处理意见：">
               <el-table
-                  :data="data">
+                  :data="includeForm.data">
                 <el-table-column
                     fixed
                     prop="name"
@@ -81,15 +85,16 @@
                 </el-table-column>
               </el-table>
             </el-form-item>
+            <el-form :model="buttonForm" size="mini" label-width="90px" >
+              <div class="twoButton">
+                <el-button size="medium" type="primary" @click="getDrugs" :disabled="includeButtonDiabled">获取处方</el-button>
+                <el-button size="medium" @click="autoAddDrugsToCart">一键加购</el-button>
+              </div>
+            </el-form>
           </el-form>
         </div>
      </el-tab-pane>
-
-
-      <el-tab-pane label="查看照片" name="third">
-        查看照片
-      </el-tab-pane>
-      <el-tab-pane label="医生信息" name="fourth">
+      <el-tab-pane label="医生信息" name="third">
       <doc_info></doc_info>
       </el-tab-pane>
     </el-tabs>
@@ -99,6 +104,8 @@
 
 <script>
 import doc_info from "./doc_info";
+import {getDrugsIncludedListDataFun,getPreDataFun,getPatientInfoDataFun,postAutoAddDataFun} from "../service/userService";
+import {} from "../service/userService";
 export default {
   name: "tabs_patient",
   components:{
@@ -106,34 +113,92 @@ export default {
   },
   data() {
     return {
-      activeName: 'fourth',
-      patient_name:'患者A',
-      disease:'风寒',
-      departments:[],
-      form1: {//查看病历
-        desc:'xxxx',  //患者主诉
-        department:'xxx',//科室
-        delivery: false,
-        checkList:['耳鸣','呕吐']//症状
+      activeName: 'third',//tab的初始位置
+      preButtonDiabled:false,//病历表button禁用设置
+      includeButtonDiabled:false,//处方表button禁用设置
+      includeTabDisabled:true,//处方tab单元的禁用设置
+      buttonForm:{},//单独的按钮表单
+      includeForm:{//处方表单
+        data:[],//存储药品表格数据
       },
-      form2:{
-
-      },
-      data:[],
+      diseaseDecidedForm: {//病历表单
+        patientName:'',//病人姓名（通过store中patientId与调用getPatient接口获取）
+        disease: '等待病人填写',//疾病
+        department:'等待病人填写',//科室
+        type:[],//症状多选框数组
+        desc: '等待病人填写'//主诉
+      }
     };
   },
+  created() {
+    this.getPatientName();//获取病人姓名
+  },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
+    getDrugs(){//获取处方信息
+      getDrugsIncludedListDataFun({
+        pre_id:this.$store.state.inquiry.preId
+      }).then(res=>{
+        if(res.result.length!=0){//当成功获取到处方信息时
+          for(let i=0;i<res.result.length;i++){
+            this.includeForm.data.push({//装入药品表格数据
+              name:res.result[i].medicine_name,
+              num:res.result[i].quantity,
+              method:res.result[i].content
+            })
+          }
+          this.includeButtonDiabled=true;//将刷新处方获取按钮禁用
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
     },
-    loadAllData(){
-      return[
-        {"name":"阿莫西林","num":1,"method":"口服"}
-      ]
+    getPatientName(){//获取患者姓名
+      getPatientInfoDataFun({
+            "ID":this.$store.state.inquiry.patientId
+          }
+      ).then(res=>{
+        this.diseaseDecidedForm.patientName=res.result.pati_name;
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    getPre(){//获取病历
+      getPreDataFun({
+        pati_id:this.$store.state.inquiry.patientId,
+        doctor_id:this.$store.state.inquiry.doctorId
+      }).then(res=>{
+        console.log(res);
+        if(res.result.prescription_ID!=null){//当成功获取到病历信息时
+          this.diseaseDecidedForm.department=res.result.department;//装入科室信息
+          this.$store.commit("editInquiryPreId",res.result.prescription_ID);//装入处方id信息，存到store，供处方组件使用
+          let content=res.result.prescription_Content;//获取content
+          let temp=content.split('——');//处理content
+          this.diseaseDecidedForm.desc=temp[0];//第一部分：患者主诉
+          this.diseaseDecidedForm.disease=temp[1];//第二部分：诊断疾病
+          let index=temp[2].split('-');//处理第三部分（由多选框数组构成）
+          for(let i=0;i<index.length;i++){//装入
+            this.diseaseDecidedForm.type.push(index[i]);
+          }
+          this.preButtonDiabled=true;//设置病历刷新按钮禁用
+          this.includeTabDisabled=false;//设置处方tab单元可用
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    autoAddDrugsToCart(){
+      postAutoAddDataFun({
+        pati_id:this.$store.state.inquiry.patientId,
+        pre_id:this.$store.state.inquiry.preId
+      }).then(res=>{
+        console.log(res);
+      }).catch(err=>{
+        console.log(err);
+      })
     }
   },
   mounted() {
-    this.data=this.loadAllData();
+    //
   }
 }
 </script>
@@ -158,5 +223,15 @@ export default {
 }
 /deep/.el-form--label-top .el-form-item__label{
   padding-left: 10px;
+}
+.button{
+  position: relative;
+  width: 50%;
+  left: 43%;
+}
+.twoButton{
+  position: relative;
+  width: 50%;
+  left: 24%;
 }
 </style>

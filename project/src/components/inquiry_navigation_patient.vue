@@ -1,59 +1,35 @@
 <template>
 <div>
 
-  <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" width="76.8px">
+  <el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse" width="76.8px">
     <el-menu-item
-        @click="dialogReportVisible=true"
-        index="1">
-      <i class="el-icon-location"></i>
-      <span slot="title">举报</span>
-    </el-menu-item>
-    <el-dialog title="举报医生" center :visible.sync="dialogReportVisible" width="30%">
-      <el-form :model="formReport">
-        <el-form-item label="举报类型" :label-width="formLabelWidth">
-          <el-radio v-model="radio" label="1">言论侮辱</el-radio>
-          <el-radio v-model="radio" label="2">恶意问诊</el-radio>
-          <el-radio v-model="radio" label="3">不良图片</el-radio>
-        </el-form-item>
-        <el-form-item label="举报理由" :label-width="formLabelWidth">
-          <el-input
-              type="textarea"
-              v-model="formReport.desc"
-              :autosize="{ minRows: 2, maxRows: 4}"
-          ></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="clearAllReportContent">清空</el-button>
-        <el-button type="primary" @click="dialogReportVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
-    <!--  评价实现 menuItem+dialog+form+rate-->
-    <el-menu-item
-        @click="dialogVisible=true"
+        @click="dialogAssessVisible=true"
         index="2">
       <i class="el-icon-menu"></i>
       <span slot="title">评价</span>
     </el-menu-item>
-    <el-dialog title="问诊评价" center :visible.sync="dialogVisible" width="30%">
-      <el-form :model="form">
+    <el-dialog title="问诊评价" center :visible.sync="dialogAssessVisible" width="30%">
+      <el-form :model="formAssess" :disabled="formAssessDisabled">
         <el-form-item label="医生态度" :label-width="formLabelWidth">
             <el-rate
-                v-model="value1"
+                :texts="docAttitude"
+                v-model="formAssess.value1"
                 :colors="colors"
                 show-text>
             </el-rate>
         </el-form-item>
         <el-form-item label="病情分析" :label-width="formLabelWidth">
           <el-rate
-              v-model="value2"
+              :texts="diseaseAnalyses"
+              v-model="formAssess.value2"
               :colors="colors"
               show-text>
           </el-rate>
         </el-form-item>
         <el-form-item label="诊疗方案" :label-width="formLabelWidth">
           <el-rate
-              v-model="value3"
+              :texts="treatment"
+              v-model="formAssess.value3"
               :colors="colors"
               show-text>
           </el-rate>
@@ -61,89 +37,83 @@
         <el-form-item label="更多评价" :label-width="formLabelWidth">
           <el-input
               type="textarea"
-              v-model="form.desc"
+              class="input"
+              v-model="formAssess.more"
               :autosize="{ minRows: 2, maxRows: 4}"
           ></el-input>
         </el-form-item>
+        <el-form-item>
+          <div class="button">
+            <el-button type="primary" @click="submit">生成</el-button>
+            <el-button @click="clearAllContent">清空</el-button>
+          </div>
+        </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="clearAllContent">清空</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </div>
     </el-dialog>
-    <!-- 结束问诊！！！！！！！！！暂时是跳转到doc_card -->
     <el-menu-item index="3" @click="quit">
       <i class="el-icon-document"></i>
       <span slot="title">退出</span>
     </el-menu-item>
-<!--    <el-menu-item index="4">-->
-<!--      <i class="el-icon-setting"></i>-->
-<!--      <span slot="title">导航四</span>-->
-<!--    </el-menu-item>-->
   </el-menu>
 </div>
 </template>
 
 <script>
+import {postRateDataFun} from "../service/userService";
+
 export default {
 name: "inquiry_navigation",
   data() {
     return {
-      radio:0,
       isCollapse: true,
-      dialogVisible:false,
-      dialogReportVisible:false,
-      form: {
-        desc: '',
+      dialogAssessVisible:false,//对话框可见属性
+      formAssessDisabled:false,//评价表单禁用设置
+      formLabelWidth: '120px',//表单标签宽度
+      formAssess:{
+        time:'',//提交时间
+        more:'',//更多评价
+        content:'',
+        value1:null,//医生态度rate
+        value2:null,//病情分析rate
+        value3:null,//诊疗方案rate
       },
-      formReport:{
-
-      },
-      formLabelWidth: '120px',
-      value1:null,
-      value2:null,
-      value3:null,
-      colors: ['#99A9BF', '#F7BA2A', '#FF9900']
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      docAttitude:['极差','失望','一般','很好','满意'],
+      diseaseAnalyses:['极差','失望','一般','标准','精准'],
+      treatment:['不满','失望','一般','很好','满意']
     };
   },
   methods: {
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
+    postRate(){//上传评价表
+      postRateDataFun({
+        pati_id:this.$store.state.inquiry.patientId,
+        doctor_id:this.$store.state.inquiry.doctorId,
+        time:this.formAssess.time,
+        content:this.formAssess.content
+      }).then(res=>{
+        console.log(res);
+      }).catch(err=>{
+        console.log(err);
+      })
     },
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+    submit(){//提交评价表单
+      let date=new Date().getDate();
+      let month=new Date().getMonth()+1;
+      let year=new Date().getFullYear();
+      this.formAssess.time=month+'-'+date+'-'+year;//获取当前上传日前
+      this.formAssess.content='医生态度：' +this.docAttitude[this.formAssess.value1]+'-'
+          +'病情分析：'+this.diseaseAnalyses[this.formAssess.value2]+'-'
+          +'诊疗方案：'+this.treatment[this.formAssess.value3]+'——'
+          +'更多评价：'+this.formAssess.more;//拼接评价内容
+      this.postRate();//post评价表
+      this.formAssessDisabled=true;
+      this.dialogAssessVisible = false;
     },
-    createAssessForm() {
-      this.$prompt('请输入邮箱', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-        inputErrorMessage: '邮箱格式不正确'
-      }).then(({ value }) => {
-        this.$message({
-          type: 'success',
-          message: '你的邮箱是: ' + value
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消输入'
-        });
-      });
-    },
-    clearAllContent(){
-      this.value1=null;
-      this.value2=null;
-      this.value3=null;
-      this.form.desc='';
-    },
-    clearAllReportContent(){
-      this.radio=0;
-      this.formReport.desc='';
+    clearAllContent(){//清空评价表单
+      this.formAssess.value1=null;
+      this.formAssess.value2=null;
+      this.formAssess.value3=null;
+      this.formAssess.more='';
     },
     quit(){
       this.$router.push('/Home');
@@ -159,5 +129,13 @@ name: "inquiry_navigation",
 }
 /deep/ .el-rate__icon{
   font-size: 35px;
+}
+.button{
+  position: relative;
+  width: 50%;
+  left: 33%;
+}
+.input{
+  width: 210px;
 }
 </style>

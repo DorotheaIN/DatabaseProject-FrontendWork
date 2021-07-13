@@ -1,8 +1,7 @@
 <template>
   <div class="talk_body">
     <div class="talk_show">
-      <div class="btalk" v-for="item in text_array"><span>{{item}}</span></div>
-      <div class="btalk" v-for="item in pic_array"><span>{{item}}</span></div>
+      <div :class="[(item.senderId==userId)?'btalk':'atalk']" v-for="item in text_array"><span>{{item.content}}</span></div>
     </div>
     <div class="talk_input">
       <el-input
@@ -10,19 +9,19 @@
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 4}"
           placeholder="请输入"
-          v-model="text">
+          v-model="text.content">
       </el-input>
       <div class="button_show">
         <el-button type="primary" icon="el-icon-edit" circle size="small" @click="dealMessage"></el-button>
         <el-upload
             class="upload-demo"
-            action="http://localhost:8080/Inquiry"
-            :show-file-list="true"
+            action="/api/Patient/getImg"
+            :show-file-list="false"
             :on-success="handUpLoadSuccess"
             :on-preview="handlePreview"
             :before-upload="beforeUpload"
             :file-list="fileList"
-            :auto-upload="false">
+            :auto-upload="true">
           <el-button type="primary" icon="el-icon-picture" circle size="small"></el-button>
         </el-upload>
         <!--
@@ -38,32 +37,30 @@
   before-upload: 上传前处理事件，返回一个值，值为false将阻止上传
   on-progress: 上传中事件
   -->
-<!--        <el-upload-->
-<!--            class="upload-demo"-->
-<!--            ref="upload"-->
-<!--            action="https://jsonplaceholder.typicode.com/posts/"-->
-<!--            :on-preview="handlePreview"-->
-<!--            :before-upload="beforeUpload"-->
-<!--            :file-list="fileList"-->
-<!--            :auto-upload="false">-->
-<!--          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>-->
-<!--          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
-<!--        </el-upload>-->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {getPatientInfoDataFun} from "../service/userService";
+
 const axios = require('axios');
 export default {
 name: "text_box",
   data() {
     return {
-
-      text_array: [],
-      text: '',
-      pic_array: [],
+      // my_text_array: [],
+      // my_text: '',
+      // my_pic_array: [],
+      userId:'12345',
+      text_array:[{content:'hello',senderId:'34455'}],
+      text:{
+        content:'',
+        senderId:''
+      },
+      opposite_text_array: ["hello"],
+      opposite_pic_array: [],
       dataObj: {
         url: ''
       },
@@ -75,37 +72,23 @@ name: "text_box",
       console.log(file);
     },
     dealMessage: function () {
-      if(this.text!='') {
-        this.text_array.push(this.text);
-        this.text = '';
-        console.log(this.text_array);
+      let _this=this;
+      if(_this.text.content!='') {
+        _this.text_array.push({content:_this.text.content,senderId:_this.userId});
+        _this.text.content = '';
+        _this.text.senderId='';
+        console.log(_this.text_array);
       }
     },
-    handUpLoadSuccess:function (res,file){
+    handUpLoadSuccess:function (res,file,fileList){
       let _this=this;
       console.log(res,file);
-      _this.dataObj.url=URL.createObjectURL(file.raw);
+      _this.dataObj.url=res.url;
       console.log(_this.dataObj.url);
     },
     beforeUpload(file){
       console.log(file);
-    }
-
-    /*
-    beforeUpload:function (file){
-
-      let api = "http://localhost:8080/Inquiry";
-      let fd = new FormData();
-      fd.append('file',file);//传文件
-      // fd.append('srid',this.upLoadData.srid);//传其他参数
-      console.log(api);
-      this.$axios.post(api,fd).then(function(res){
-        console.log('成功');
-      })
-      return falseww
-    }
-    */
-
+    },
   }
 };
 </script>
@@ -122,7 +105,7 @@ name: "text_box",
 .talk_show {
   position: relative;
   width: 100%;
-  height: 80%;
+  height: 84%;
   border: 1px #CFCFCF;
   top:0;
   background: #fff;
@@ -131,7 +114,7 @@ name: "text_box",
 }
 .talk_input{
   position: relative;
-  height: 20%;
+  height: 14%;
   margin: auto;
   width:95%;
   bottom: 0;
@@ -139,6 +122,7 @@ name: "text_box",
 
 .atalk {
   margin: 10px;
+  margin-left: 30px;
 }
 
 .atalk span {
@@ -150,6 +134,7 @@ name: "text_box",
 }
 
 .button_show{
+  height: 40px;
   padding-top: 10px;
   left:20px;
   text-align: right;

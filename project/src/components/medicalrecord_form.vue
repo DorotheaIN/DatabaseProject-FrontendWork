@@ -1,40 +1,39 @@
 <template>
   <div class="form_body">
-    <el-form ref="form" :model="form" size="mini" label-width="90px" >
+    <el-form :model="diseaseDecidedForm" size="mini" label-width="90px" :disabled="writeDisabled">
       <el-form-item label="患者姓名：">
-        <span>{{patient_name}}</span>
+        <span>{{this.$store.state.inquiry.patientName}}</span>
       </el-form-item>
       <el-form-item label="患者主诉：">
         <el-input
+            class="input"
             type="textarea"
-            v-model="form.desc"
+            v-model="diseaseDecidedForm.desc"
             :autosize="{ minRows: 2, maxRows: 4}"
         ></el-input>
       </el-form-item>
       <el-form-item label="诊断疾病：">
         <el-autocomplete
             class="inline-input"
-            v-model="form.disease"
+            v-model="diseaseDecidedForm.disease"
             :fetch-suggestions="querySearchDiseases"
             placeholder=''
             :trigger-on-focus="false"
-            @select="handleSelect"
             size="mini"
         ></el-autocomplete>
       </el-form-item>
       <el-form-item label="所属科室：">
         <el-autocomplete
             class="inline-input"
-            v-model="form.department"
+            v-model="diseaseDecidedForm.department"
             :fetch-suggestions="querySearchDepartments"
             placeholder=''
             :trigger-on-focus="false"
-            @select="handleSelect"
             size="mini"
         ></el-autocomplete>
       </el-form-item>
       <el-form-item label="相应症状：">
-        <el-checkbox-group v-model="form.type">
+        <el-checkbox-group v-model="diseaseDecidedForm.type">
           <el-checkbox label="头痛"></el-checkbox>
           <el-checkbox label="头昏"></el-checkbox>
           <el-checkbox label="心悸"></el-checkbox>
@@ -64,34 +63,90 @@
         </el-checkbox-group>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">生成</el-button>
-        <el-button @click="clearAllContent">清空</el-button>
+        <el-button size="medium" type="primary" @click="onSubmit">生成</el-button>
+        <el-button size="medium" @click="clearAllContent">清空</el-button>
       </el-form-item>
     </el-form>
   </div>
-
 </template>
 
 <script>
+import {postPreDataFun,getDiseaseListDataFun,getDepartmentListDataFun} from "../service/userService";
 export default {
   name: "inquiry_record",
   data() {
     return {
-      patient_name:'患者A',//患者姓名
-      diseases:[],
-      departments:[],
-      form: {
+      departments:[],//所有科室
+      diseases:[],//所有疾病
+      diseaseDecidedForm: {
         disease: '',//疾病
         department:'',//科室
-        delivery: false,
         type: [],//症状
-        resource: '',
-        desc: ''//主诉
-      }
+        content:'',
+        time:'',
+        desc: '',//患者主诉
+      },
+      writeDisabled:false,//病历表单禁用设置
     }
   },
+  created() {
+    this.load();//加载用于选择/筛选的疾病信息，药品信息，科室信息
+  },
   methods: {
-    onSubmit() {
+    postPre(){
+      postPreDataFun({//上传病历信息
+        Pati_ID:this.$store.state.inquiry.patientId,
+        Doctor_ID:this.$store.state.inquiry.doctorId,
+        department:this.diseaseDecidedForm.department,
+        time:this.diseaseDecidedForm.time,
+        content:this.diseaseDecidedForm.content
+      }).then(res=>{
+        let preId=res.result.prescription_ID;
+        this.$store.commit("editInquiryPreId",preId);
+        console.log(res);
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    load(){//预加载
+      getDiseaseListDataFun(//加载所有疾病
+      ).then(res=>{
+        for(let i=0;i<res.result.length;i++){
+          this.diseases.push({
+            "value":res.result[i].disease_Name
+          })
+          // console.log(this.diseases);
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+      getDepartmentListDataFun(//加载所有科室
+      ).then(res=>{
+        for(let i=0;i<res.result.length;i++){
+          this.departments.push({
+            "value":res.result[i].department
+          })
+        }
+        // console.log(this.departments);
+      }).catch(err=>{
+      })
+    },
+    onSubmit() {//提交病历表单
+      let date=new Date().getDate();
+      let month=new Date().getMonth()+1;
+      let year=new Date().getFullYear();
+      this.diseaseDecidedForm.time=month+'-'+date+'-'+year;
+      let content=this.diseaseDecidedForm.desc+'——'+this.diseaseDecidedForm.disease+'——';
+      let i=0;
+      for(i=0;i<this.diseaseDecidedForm.type.length-1;i++){
+        content=content+this.diseaseDecidedForm.type[i]+'-';
+      }
+      content=content+this.diseaseDecidedForm.type[i];
+      this.diseaseDecidedForm.content=content;
+      this.$store.commit("editDiseaseDecided",this.diseaseDecidedForm.disease);
+      this.postPre();
+      this.writeDisabled=true;
+      this.$store.commit("editInquiryIncludeDisabled",false);
       console.log('submit!');
     },
     querySearchDiseases(queryString,cb){
@@ -114,52 +169,35 @@ export default {
         return (department.value.toLowerCase().indexOf(queryString.toLowerCase())===0)
       };
     },
-    loadAllDiseases(){
-      return [
-        {"value":"风寒感冒"},
-        {"value":"小儿麻痹症"}
-      ]
-    },
-    loadAllDepartments(){
-      return [
-        {"value":"眼科"},
-        {"value":"耳科"}
-      ]
-    },
-    handleSelect(item){
-      console.log(item);
-    },
-    clearAllContent(){
-      this.form.desc='';
-      this.form.disease='';
-      this.form.department='';
-      this.form.type='';
+    clearAllContent(){//清空病历表单内容
+      this.diseaseDecidedForm.desc='';
+      this.diseaseDecidedForm.disease='';
+      this.diseaseDecidedForm.department='';
+      this.diseaseDecidedForm.type=[];
     }
-
   },
-  mounted() {
-    this.diseases=this.loadAllDiseases();
-    this.departments=this.loadAllDepartments();
-  }
+
 }
 </script>
 
 <style scoped>
-.form_body{
-  width: 99%;
-  height: 100%;
-  border: 0;
-  left:20px;
-  font-family: "微软雅黑";
-  overflow: auto;
+/*.form_body{*/
+/*  width: 99%;*/
+/*  height: 100%;*/
+/*  border: 0;*/
+/*  left:20px;*/
+/*  font-family: "微软雅黑";*/
+/*  overflow: auto;*/
+/*}*/
+/*/deep/.el-form-item{*/
+/*  font-size: 10px;*/
+/*  margin-bottom: 1px;*/
+/*}*/
+/*/deep/.el-form-item--mini.el-form-item{*/
+/*  margin-bottom: 6px;*/
+/*}*/
+.input{
+  width: 185.6px;
 }
-/deep/.el-form-item{
-  font-size: 10px;
-  margin-bottom: 1px;
-}
-/deep/.el-form-item--mini.el-form-item{
-  margin-bottom: 6px;
-}
-
 
 </style>

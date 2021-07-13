@@ -18,7 +18,7 @@ Vue.$http=axios
 
 Vue.use(Vuex)
 
-require('./mocks/index.js')
+// require('./mocks/index.js')
 
 new Vue({
   router,

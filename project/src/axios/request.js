@@ -3,7 +3,6 @@ import qs from 'qs';//一个库
 export default {
   // get请求
   get(url, param) {
-    //console.log(url)
     return new Promise((resolve, reject) => {
       axios({
         method: 'get',
@@ -24,7 +23,8 @@ export default {
       axios({
         method: 'post',
         url,
-        data: param
+        data: param,
+        //data: JSON.stringify(param)
       })
         .then((res = {}) => {
           if (res.code !== '200') reject(res);
