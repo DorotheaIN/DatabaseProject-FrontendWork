@@ -2,7 +2,7 @@
   <div>
     <div class="navigation">
       <div class="image">
-        <img :src="`https://ui-avatars.com/api/?size=60&length=1&bold=true&background=409EFF&color=ffffff&rounded=true&name=${user.name}`"weight=44px height=44px>
+        <img :src="`https://ui-avatars.com/api/?size=60&length=1&bold=true&background=409EFF&color=ffffff&rounded=true&name=${patientName}`"weight=44px height=44px>
       </div>
       <inquiry_navigation_patient></inquiry_navigation_patient>
     </div>
@@ -32,13 +32,11 @@ export default {
     text_box,
     inquiry_record,
     tabs_patient,
-    inquiry_navigation_patient
+    inquiry_navigation_patient,
   },
   data(){
     return{
-      user:{
-        name:'患者1'
-      },
+      patientName:this.$store.state.inquiry.patientName,
       text:'',
       textarea2:''
     }
@@ -49,8 +47,11 @@ export default {
 <style scoped>
 .navigation{
   position: absolute;
-  top:10px;
+  padding-top: 10px;
+  /*top:10px;*/
   width:64px;
+  height: 98.5%;
+  background: RGB(70,80,105);
 }
 .image{
   padding-top: 15px;

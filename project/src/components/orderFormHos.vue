@@ -5,7 +5,7 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="身份证号">
-        <el-input v-model="form.data1"></el-input>
+        <el-input v-model="form.data1" maxlength="18" minlength="18"></el-input>
       </el-form-item>
       <el-form-item label="预约时间">
         <el-col :span="11">
@@ -79,7 +79,7 @@ export default {
       this.visible = false
       this.$emit('formSubmit',this.form)
     },
-  onClose(){//加一个beforeclose以及防止误触 
+  onClose(){//加一个beforeclose以及防止误触
       this.$emit('formClose',false)
     },
   },

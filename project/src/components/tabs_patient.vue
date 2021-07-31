@@ -88,7 +88,7 @@
             <el-form :model="buttonForm" size="mini" label-width="90px" >
               <div class="twoButton">
                 <el-button size="medium" type="primary" @click="getDrugs" :disabled="includeButtonDiabled">获取处方</el-button>
-                <el-button size="medium" @click="autoAddDrugsToCart">一键加购</el-button>
+                <el-button size="medium" @click="autoAddDrugsToCart" :disabled="addDrugsDisabled">一键加购</el-button>
               </div>
             </el-form>
           </el-form>
@@ -117,22 +117,23 @@ export default {
       preButtonDiabled:false,//病历表button禁用设置
       includeButtonDiabled:false,//处方表button禁用设置
       includeTabDisabled:true,//处方tab单元的禁用设置
+      addDrugsDisabled:true,
       buttonForm:{},//单独的按钮表单
       includeForm:{//处方表单
         data:[],//存储药品表格数据
       },
       diseaseDecidedForm: {//病历表单
-        patientName:'',//病人姓名（通过store中patientId与调用getPatient接口获取）
-        disease: '等待病人填写',//疾病
-        department:'等待病人填写',//科室
+        patientName:this.$store.state.inquiry.patientName,//病人姓名（通过store中patientId与调用getPatient接口获取）
+        disease: '等待医生填写',//疾病
+        department:'等待医生填写',//科室
         type:[],//症状多选框数组
-        desc: '等待病人填写'//主诉
+        desc: '等待医生填写'//主诉
       }
     };
   },
-  created() {
-    this.getPatientName();//获取病人姓名
-  },
+  // created() {
+  //   this.getPatientName();//获取病人姓名
+  // },
   methods: {
     getDrugs(){//获取处方信息
       getDrugsIncludedListDataFun({
@@ -147,21 +148,22 @@ export default {
             })
           }
           this.includeButtonDiabled=true;//将刷新处方获取按钮禁用
+          this.addDrugsDisabled=false;//将一键购药开放
         }
       }).catch(err=>{
         console.log(err);
       })
     },
-    getPatientName(){//获取患者姓名
-      getPatientInfoDataFun({
-            "ID":this.$store.state.inquiry.patientId
-          }
-      ).then(res=>{
-        this.diseaseDecidedForm.patientName=res.result.pati_name;
-      }).catch(err=>{
-        console.log(err);
-      })
-    },
+    // getPatientName(){//获取患者姓名
+    //   getPatientInfoDataFun({
+    //         "ID":this.$store.state.inquiry.patientId
+    //       }
+    //   ).then(res=>{
+    //     this.diseaseDecidedForm.patientName=res.result.pati_name;
+    //   }).catch(err=>{
+    //     console.log(err);
+    //   })
+    // },
     getPre(){//获取病历
       getPreDataFun({
         pati_id:this.$store.state.inquiry.patientId,
@@ -191,6 +193,11 @@ export default {
         pati_id:this.$store.state.inquiry.patientId,
         pre_id:this.$store.state.inquiry.preId
       }).then(res=>{
+        this.addDrugsDisabled=true;
+        this.$message({
+          message: '自动加购成功！',
+          type: 'success'
+        });
         console.log(res);
       }).catch(err=>{
         console.log(err);

@@ -1,11 +1,16 @@
 <template>
 <div>
 
-  <el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse" width="76.8px">
+  <el-menu default-active="1-4-1"
+           class="el-menu-vertical-demo"
+           :collapse="isCollapse"
+           width="76.8px"
+           style="padding-top: 10px"
+           background-color="RGB(70,80,105)">
     <el-menu-item
         @click="dialogAssessVisible=true"
         index="2">
-      <i class="el-icon-menu"></i>
+      <i class="el-icon-star-off"></i>
       <span slot="title">评价</span>
     </el-menu-item>
     <el-dialog title="问诊评价" center :visible.sync="dialogAssessVisible" width="30%">
@@ -51,7 +56,7 @@
       </el-form>
     </el-dialog>
     <el-menu-item index="3" @click="quit">
-      <i class="el-icon-document"></i>
+      <i class="el-icon-back"></i>
       <span slot="title">退出</span>
     </el-menu-item>
   </el-menu>
@@ -97,17 +102,25 @@ name: "inquiry_navigation",
       })
     },
     submit(){//提交评价表单
-      let date=new Date().getDate();
-      let month=new Date().getMonth()+1;
-      let year=new Date().getFullYear();
-      this.formAssess.time=month+'-'+date+'-'+year;//获取当前上传日前
-      this.formAssess.content='医生态度：' +this.docAttitude[this.formAssess.value1]+'-'
-          +'病情分析：'+this.diseaseAnalyses[this.formAssess.value2]+'-'
-          +'诊疗方案：'+this.treatment[this.formAssess.value3]+'——'
-          +'更多评价：'+this.formAssess.more;//拼接评价内容
-      this.postRate();//post评价表
-      this.formAssessDisabled=true;
-      this.dialogAssessVisible = false;
+      if(this.formAssess.value1==0||this.formAssess.value2==0||this.formAssess.value3==0){
+        this.$message({
+          message: '请评价好问诊各项信息再提交',
+          type: 'warning'
+        });
+      }else{
+        console.log(this.formAssess.value3+'_'+this.formAssess.value2);
+        let date=new Date().getDate();
+        let month=new Date().getMonth()+1;
+        let year=new Date().getFullYear();
+        this.formAssess.time=month+'-'+date+'-'+year;//获取当前上传日前
+        this.formAssess.content='医生态度：' +this.docAttitude[this.formAssess.value1]+'-'
+            +'病情分析：'+this.diseaseAnalyses[this.formAssess.value2]+'-'
+            +'诊疗方案：'+this.treatment[this.formAssess.value3]+'——'
+            +'更多评价：'+this.formAssess.more;//拼接评价内容
+        this.postRate();//post评价表
+        this.formAssessDisabled=true;
+        this.dialogAssessVisible = false;
+      }
     },
     clearAllContent(){//清空评价表单
       this.formAssess.value1=null;
@@ -116,6 +129,7 @@ name: "inquiry_navigation",
       this.formAssess.more='';
     },
     quit(){
+      clearInterval(this.$store.state.inquiry.chatroomId);
       this.$router.push('/Home');
     }
   }
@@ -138,4 +152,11 @@ name: "inquiry_navigation",
 .input{
   width: 210px;
 }
+.el-menu-item.is-active {
+  background-color: RGB(70,80,105) !important;
+}
+.el-menu-item:hover {
+  background-color: RGB(70,80,105) !important;
+}
+
 </style>

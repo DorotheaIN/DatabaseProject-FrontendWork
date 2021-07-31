@@ -10,14 +10,18 @@
       <el-form-item  label="处理意见：">
         <el-row>
           <el-col :span="8">
-            <el-input
-                size="mini"
-                placeholder="如：阿莫西林"
-                class="input1"
-                v-model="preForm2.name">
-            </el-input>
+            <el-select v-model="preForm2.name" filterable placeholder="请选择">
+              <el-option
+                  v-for="item in drugs"
+                  class="input1"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.label">
+              </el-option>
+            </el-select>
           </el-col>
           <el-col :span="4">
+<!--            <el-input-number v-model="preForm2.num" :min="1" :max="10" size="mini"></el-input-number>-->
             <el-input
                 size="mini"
                 class="input2"
@@ -42,16 +46,25 @@
               prop="name"
               width="90px"
               label="药品">
-            <template slot-scope="scope">
-              <el-input type="text" v-model="editName" v-if="editIndex === scope.$index" />
-              <span v-else>{{ scope.row.name }}</span>
-            </template>
+<!--            <template slot-scope="scope">-->
+<!--              <el-input type="text" v-model="editName" v-if="editIndex === scope.$index" />-->
+<!--              <span v-else>{{ scope.row.name }}</span>-->
+<!--            </template>-->
           </el-table-column>
           <el-table-column
               fixed
               prop="num"
               width="70px"
               label="数量/盒">
+<!--            <template slot-scope="scope">-->
+<!--              <el-input-number-->
+<!--                  v-model="editNum"-->
+<!--                  controls-position="right"-->
+<!--                  :min="1" :max="10"-->
+<!--                  size="small"-->
+<!--                  v-if="editIndex === scope.$index"></el-input-number>-->
+<!--              <span v-else>{{ scope.row.num }}</span>-->
+<!--            </template>-->
             <template slot-scope="scope">
               <el-input type="text" v-model="editNum" v-if="editIndex === scope.$index" />
               <span v-else>{{ scope.row.num }}</span>
@@ -132,10 +145,10 @@ export default {
       ).then(res=>{
         for(let i=0;i<res.result.length;i++){
           this.drugs.push({
-            "value":res.result[i].medicine_Name
+            "label":res.result[i].medicine_Name,
           })
         }
-        console.log(this.drugs);
+        // console.log(this.drugs);
       }).catch(err=>{
         console.log(err);
       })
@@ -147,21 +160,30 @@ export default {
         quantity:this.submit.num,
         content:this.submit.method
       }).then(res => {
-        console.log(res);
+        // console.log(res);
       }).catch(err => {
-        console.log(err);
+        // console.log(err);
       })
     },
     onSubmit() {//提交
-      for(let i=0;i<this.preForm2.data.length;i++){
-        this.submit.name=this.preForm2.data[i].name;
-        this.submit.num=this.preForm2.data[i].num;
-        this.submit.method=this.preForm2.data[i].method;
-        console.log(this.submit);
-        this.postMedicineIncluded();
+      let temp=this.preForm2;
+      if(temp.data.length==0){
+        this.$message({
+          message: '请完整填写处方信息再提交',
+          type: 'warning'
+        });
+      }else{
+        for(let i=0;i<this.preForm2.data.length;i++){
+          this.submit.name=this.preForm2.data[i].name;
+          this.submit.num=this.preForm2.data[i].num;
+          this.submit.method=this.preForm2.data[i].method;
+          // console.log(this.submit);
+          this.postMedicineIncluded();
+        }
+        this.preFormDisabled=true;
+        // console.log('submit!');
       }
-      this.preFormDisabled=true;
-      console.log('submit!');
+
     },
     handleSelect(item){
       console.log(item);
@@ -180,13 +202,13 @@ export default {
       }
     },
     handleEdit(row,index){//编辑药品表
-      this.editName=row.name;
+      // this.editName=row.name;
       this.editNum=row.num;
       this.editMethod=row.method;
       this.editIndex=index;
     },
     handleSave(index){//保存编辑
-      this.preForm2.data[index].name=this.editName;
+      // this.preForm2.data[index].name=this.editName;
       this.preForm2.data[index].num=this.editNum;
       this.preForm2.data[index].method=this.editMethod;
       this.editIndex=-1;
@@ -207,11 +229,12 @@ export default {
 <style scoped>
 .input1{
   width: 132px;
-  padding-right: 2px;
+  padding-right: 5px
 }
 .input2{
   width: 65px;
-  padding-right: 5px;
+  padding-right: 2px;
+  padding-left: 2px;
 }
 /*.form_body{*/
 /*  width: 99%;*/

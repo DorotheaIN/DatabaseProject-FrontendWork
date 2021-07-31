@@ -3,7 +3,6 @@
     <div class="image">
       <span class="test">{{oppositeName}}</span>
     </div>
-
   </div>
 </template>
 
@@ -21,11 +20,11 @@ name: "inquiry_title",
   methods:{
     loadOppositeName(){
       if(this.$store.state.identity=='patient'){
-        this.oppositeName=this.$store.state.inquiry.doctorName
+        this.oppositeName=this.$store.state.inquiry.doctorName+'医生';
       }else{
-        this.oppositeName=this.$store.state.inquiry.patientName
+        this.oppositeName=this.$store.state.inquiry.patientName;
       }
-
+      console.log(this.oppositeName);
     }
   },
 }
@@ -33,10 +32,13 @@ name: "inquiry_title",
 
 <style scoped>
 .title{
-  margin-top: 20px;
+  position: relative;
+  padding-top: 20px;
   border-bottom: 1px solid #DCDCDC;
-  margin-right: 10px;
-  margin-left: 10px;
+  padding-right: 10px;
+  padding-left: 29px;
+  height: 5%;
+  /*background: RGB(236,245,255);*/
 }
 .image{
   padding-left:400px;

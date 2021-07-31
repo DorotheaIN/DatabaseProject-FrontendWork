@@ -102,7 +102,7 @@ axios.interceptors.request.use(
       config.params = qs.stringify(config.params)
       config.url += '?' + config.params
     }
-    console.log(config)
+    // console.log(config)
     //config.data = qs.stringify(config.data)
     //config.url += '?' + config.data
     //config.headers.token = localStorage.getItem('$token_info');

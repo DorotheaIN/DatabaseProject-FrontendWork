@@ -2,7 +2,7 @@
   <div>
     <div class="navigation">
       <div class="image">
-        <img :src="`https://ui-avatars.com/api/?size=60&length=1&bold=true&background=409EFF&color=ffffff&rounded=true&name=${user.name}`"weight=44px height=44px>
+       <img :src="`http://106.14.45.227:8080/${num}.png`" height="44px">
       </div>
       <inquiry_navigation_doc></inquiry_navigation_doc>
     </div>
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import {getDocInfoData} from "@/service/userService";
 import text_box from "@/components/text_box";
 import inquiry_record from "@/components/medicalrecord_form";
 import tabs from "@/components/tabs";
@@ -33,17 +34,29 @@ export default {
     text_box,
     inquiry_record,
     tabs,
-    inquiry_navigation_doc
+    inquiry_navigation_doc,
   },
   data(){
     return{
-      user:{
-        name:'医生1'
-      },
-      text:'',
-      textarea2:''
+      num:null,
     }
-
+  },
+  created() {
+    getDocInfoData({
+      id:this.$store.state.inquiry.doctorId
+    }).then(res=>{
+      console.log(res);
+      let temp=res.result.picture_url;
+      if(temp.length==32){
+        this.num=res.result.picture_url.substring(27,28);
+      }
+      else{
+        this.num=res.result.picture_url.substring(27,29);
+      }
+      console.log(this.num);
+    }).catch(err=>{
+      console.log(err);
+    })
   }
 }
 </script>
@@ -51,8 +64,13 @@ export default {
 
 .navigation{
   position: absolute;
-  top:10px;
+  padding-top: 10px;
+  /*top:10px;*/
   width:64px;
+  height: 98.5%;
+  background: RGB(70,80,105);
+
+  /*background: RGB(236,245,255);*/
 }
 .image{
   padding-top: 15px;
@@ -64,6 +82,7 @@ export default {
   left: 64px;
   bottom: 0;
   width: 65%;
+  height: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
   overflow: hidden
 }
@@ -85,7 +104,6 @@ export default {
   top:15px;
   left:20px;
   overflow: hidden
-
 }
 
 </style>

@@ -6,31 +6,31 @@
       </el-form-item>
       <el-form-item label="患者主诉：">
         <el-input
+            placeholder="请输入内容"
             class="input"
-            type="textarea"
             v-model="diseaseDecidedForm.desc"
-            :autosize="{ minRows: 2, maxRows: 4}"
-        ></el-input>
+            clearable>
+        </el-input>
       </el-form-item>
       <el-form-item label="诊断疾病：">
-        <el-autocomplete
-            class="inline-input"
-            v-model="diseaseDecidedForm.disease"
-            :fetch-suggestions="querySearchDiseases"
-            placeholder=''
-            :trigger-on-focus="false"
-            size="mini"
-        ></el-autocomplete>
+        <el-select v-model="diseaseDecidedForm.disease" filterable placeholder="请选择疾病">
+          <el-option
+              v-for="item in diseases"
+              :key="item.label"
+              :label="item.label"
+              :value="item.label">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="所属科室：">
-        <el-autocomplete
-            class="inline-input"
-            v-model="diseaseDecidedForm.department"
-            :fetch-suggestions="querySearchDepartments"
-            placeholder=''
-            :trigger-on-focus="false"
-            size="mini"
-        ></el-autocomplete>
+        <el-select v-model="diseaseDecidedForm.department" filterable placeholder="请选择科室">
+          <el-option
+              v-for="item in departments"
+              :key="item.label"
+              :label="item.label"
+              :value="item.label">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="相应症状：">
         <el-checkbox-group v-model="diseaseDecidedForm.type">
@@ -113,7 +113,8 @@ export default {
       ).then(res=>{
         for(let i=0;i<res.result.length;i++){
           this.diseases.push({
-            "value":res.result[i].disease_Name
+            // "value":"选项"+i,
+            "label":res.result[i].disease_Name
           })
           // console.log(this.diseases);
         }
@@ -124,7 +125,7 @@ export default {
       ).then(res=>{
         for(let i=0;i<res.result.length;i++){
           this.departments.push({
-            "value":res.result[i].department
+            "label":res.result[i].department,
           })
         }
         // console.log(this.departments);
@@ -132,42 +133,30 @@ export default {
       })
     },
     onSubmit() {//提交病历表单
-      let date=new Date().getDate();
-      let month=new Date().getMonth()+1;
-      let year=new Date().getFullYear();
-      this.diseaseDecidedForm.time=month+'-'+date+'-'+year;
-      let content=this.diseaseDecidedForm.desc+'——'+this.diseaseDecidedForm.disease+'——';
-      let i=0;
-      for(i=0;i<this.diseaseDecidedForm.type.length-1;i++){
-        content=content+this.diseaseDecidedForm.type[i]+'-';
+      let temp=this.diseaseDecidedForm;
+      if(temp.department==''||temp.disease==''||temp.desc==''){
+        this.$message({
+          message: '请完整填写病历信息再提交',
+          type: 'warning'
+        });
+      }else{
+        let date=new Date().getDate();
+        let month=new Date().getMonth()+1;
+        let year=new Date().getFullYear();
+        this.diseaseDecidedForm.time=month+'-'+date+'-'+year;
+        let content=this.diseaseDecidedForm.desc+'——'+this.diseaseDecidedForm.disease+'——';
+        let i=0;
+        for(i=0;i<this.diseaseDecidedForm.type.length-1;i++){
+          content=content+this.diseaseDecidedForm.type[i]+'-';
+        }
+        content=content+this.diseaseDecidedForm.type[i];
+        this.diseaseDecidedForm.content=content;
+        this.$store.commit("editDiseaseDecided",this.diseaseDecidedForm.disease);
+        this.postPre();
+        this.writeDisabled=true;
+        this.$store.commit("editInquiryIncludeDisabled",false);
+        // console.log('submit!');
       }
-      content=content+this.diseaseDecidedForm.type[i];
-      this.diseaseDecidedForm.content=content;
-      this.$store.commit("editDiseaseDecided",this.diseaseDecidedForm.disease);
-      this.postPre();
-      this.writeDisabled=true;
-      this.$store.commit("editInquiryIncludeDisabled",false);
-      console.log('submit!');
-    },
-    querySearchDiseases(queryString,cb){
-      let diseases=this.diseases;
-      let results=queryString?diseases.filter(this.createFilterDiseases(queryString)):diseases;
-      cb(results);
-    },
-    querySearchDepartments(queryString,cb){
-      let departments=this.departments;
-      let results=queryString?departments.filter(this.createFilterDepartments(queryString)):departments;
-      cb(results);
-    },
-    createFilterDiseases(queryString){
-      return (disease)=>{
-        return (disease.value.toLowerCase().indexOf(queryString.toLowerCase())===0)
-      };
-    },
-    createFilterDepartments(queryString){
-      return (department)=>{
-        return (department.value.toLowerCase().indexOf(queryString.toLowerCase())===0)
-      };
     },
     clearAllContent(){//清空病历表单内容
       this.diseaseDecidedForm.desc='';
@@ -196,8 +185,12 @@ export default {
 /*/deep/.el-form-item--mini.el-form-item{*/
 /*  margin-bottom: 6px;*/
 /*}*/
+.el-textarea__inner{
+  font-family:"Microsoft";
+  font-size:20px;
+}
 .input{
-  width: 185.6px;
+  width: 199px;
 }
 
 </style>

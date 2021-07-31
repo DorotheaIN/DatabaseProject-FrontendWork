@@ -1,11 +1,11 @@
 import patient from './modules/patient';
 import doctor from './modules/doctor';
 import admin from './modules/admin';
-import base from './modules/base';
+import alluser from "./modules/alluser";
 
 export default {
     patient,
     doctor,
     admin,
-    base
+    alluser,
 };

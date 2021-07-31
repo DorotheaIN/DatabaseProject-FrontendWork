@@ -1,31 +1,31 @@
 <template>
   <div class="form_body">
     <el-form ref="form" :model="patient" size="mini" label-width="90px">
-      <el-form-item label="姓名：">
+      <el-form-item label="患者姓名：">
         <span>{{patient.patiName}}</span>
       </el-form-item>
 <!--      <el-form-item label="身份证号：">-->
 <!--        <span>{{patient.identi}}</span>-->
 <!--      </el-form-item>-->
-      <el-form-item label="性别：">
+      <el-form-item label="患者性别：">
         <span>{{patient.sex}}</span>
       </el-form-item>
 <!--      <el-form-item label="电话：">-->
 <!--        <span>{{patient.tel}}</span>-->
 <!--      </el-form-item>-->
-      <el-form-item label="身高：">
+      <el-form-item label="患者身高：">
         <span>{{patient.height}}</span>
       </el-form-item>
-      <el-form-item label="体重：">
+      <el-form-item label="患者体重：">
         <span>{{patient.weight}}</span>
       </el-form-item>
-      <el-form-item label="BMI：">
+      <el-form-item label="患者BMI：">
         <span>{{patient.BMI}}</span>
       </el-form-item>
-      <el-form-item label="心率：">
+      <el-form-item label="患者心率：">
         <span>{{patient.heartRate}}</span>
       </el-form-item>
-      <el-form-item label="血压：">
+      <el-form-item label="患者血压：">
         <span>{{patient.bloodPre}}</span>
       </el-form-item>
 <!--      <el-form-item label="收缩压：">-->
@@ -56,8 +56,6 @@ name: "patient_information",
       BMI:'',
       heartRate:'',
       bloodPre:'',
-      // smallBloodPressure:'',
-      // largeBloodPressure:'',
     }
   }
   },
@@ -74,7 +72,6 @@ name: "patient_information",
         this.patient.patiName=res.result.pati_name;
         this.patient.sex=res.result.sex;
         this.patient.tel=res.result.tel;
-        this.$store.commit("editInquiryPatientName",this.patient.patiName);
       }).catch(err=>{
         console.log(err);
       })
@@ -82,15 +79,13 @@ name: "patient_information",
         "pati_id":this.$store.state.inquiry.patientId
       }).then(res=>{
         console.log(res);
-        this.patient.height=res.result.height;
-        this.patient.weight=res.result.weight;
-        this.patient.BMI=res.result.bmi;
+        this.patient.height=res.result.height+' cm';
+        this.patient.weight=res.result.weight+' kg';
+        let bmi=res.result.bmi;
         this.patient.heartRate=res.result.heart_rate+' bmp';
         console.log(this.patient.heartRate);
-        // this.patient.smallBloodPressure=res.result.diastolic_pressure;
-        // this.patient.largeBloodPressure=res.result.systolic_pressure;
         this.patient.bloodPre=res.result.diastolic_pressure+'~'+res.result.systolic_pressure+' mmHg';
-        this.patient.BMI=this.patient.BMI.toFixed(2);
+        this.patient.BMI=bmi.substring(0,5)+' kg/㎡';
       }).catch(err=>{
         console.log(err);
       })

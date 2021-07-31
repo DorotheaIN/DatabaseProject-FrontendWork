@@ -48,6 +48,10 @@ export function postAutoAddDataFun(params){
 export function getDrugListDataFun(params){
   return request.get(url.patient.getDrugListData,params);
 }
-  // export function getPatientInfoDataFun(params){
-  //   return request.get(url.doctor.getPatientInfoData,params);
-  // }
+export function sendChatMesFun(params){
+  return request.post(url.alluser.sendChatMes,params);
+}
+export function getChatMesFun(params){
+  return request.get(url.alluser.getChatMes,params);
+}
+
